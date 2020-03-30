@@ -2,14 +2,15 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import firebase from "firebase";
 import Dashboard from "@/components/dashboard/dashboard.vue";
-import SignIn from "@/components/sign-in/sign-in.vue";
+import SignUp from "@/components/sign-up/sign-up.vue";
+import Login from "@/components/login/login.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "*",
-    redirect: "/sign-in"
+    redirect: "/login"
   },
   {
     path: "/dashboard",
@@ -20,9 +21,14 @@ const routes = [
     }
   },
   {
-    path: "/sign-in",
-    name: "SignIn",
-    component: SignIn
+    path: "/sign-up",
+    name: "SignUp",
+    component: SignUp
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login
   }
 ];
 

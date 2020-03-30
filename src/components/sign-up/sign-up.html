@@ -1,6 +1,5 @@
 <section class="sign-up">
-  <!-- Sign up -->
-  <div v-if="!showLogin">
+  <div>
     <div>Create profile</div>
     <b-field label="Email">
       <b-input type="email" v-model="email" placeholder="Email"> </b-input>
@@ -38,28 +37,7 @@
     <button @click="signUp">Sign Up</button>
     <p>
       Go back to
-      <a @click="showLogin=true">login</a>
-    </p>
-  </div>
-  <!-- Login -->
-  <div v-else>
-    <div>Login</div>
-    <b-field label="Email">
-      <b-input type="email" v-model="email" placeholder="Email"> </b-input>
-    </b-field>
-    <b-field label="Password">
-      <b-input
-        type="password"
-        v-model="password"
-        placeholder="Password"
-        password-reveal
-      >
-      </b-input>
-    </b-field>
-    <button @click="login">Login</button>
-    <p>
-      Don't have an account?
-      <a @click="showLogin=false">Sign Up</a>
+      <router-link to="/login">login</router-link>
     </p>
   </div>
 </section>
