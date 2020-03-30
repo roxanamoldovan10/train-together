@@ -1,0 +1,43 @@
+<section class="sign-up">
+  <div>
+    <div>Create profile</div>
+    <b-field label="Email">
+      <b-input type="email" v-model="email" placeholder="Email"> </b-input>
+    </b-field>
+    <b-field label="Password">
+      <b-input
+        type="password"
+        v-model="password"
+        placeholder="Password"
+        password-reveal
+      >
+      </b-input>
+    </b-field>
+
+    <!-- Profile details -->
+    <p>Profile details</p>
+    <div>
+      <b-field label="Name">
+        <b-input type="text" v-model="name" placeholder="Name"> </b-input>
+      </b-field>
+      <b-field label="Username">
+        <b-input type="text" v-model="username" placeholder="Username">
+        </b-input>
+      </b-field>
+      <b-field label="Gender">
+        <b-input type="text" v-model="gender" placeholder="Gender"> </b-input>
+      </b-field>
+      <b-field label="Location">
+        <b-input type="text" v-model="location" placeholder="Location">
+        </b-input>
+      </b-field>
+      <!-- Add 'choose category' -->
+    </div>
+
+    <button @click="signUp">Sign Up</button>
+    <p>
+      Go back to
+      <router-link to="/login">login</router-link>
+    </p>
+  </div>
+</section>

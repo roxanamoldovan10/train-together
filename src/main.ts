@@ -1,16 +1,28 @@
 import Vue from "vue";
 import App from "./App.vue";
+import firebase from "firebase";
 import router from "./router";
 import store from "./store";
 import Buefy from "buefy";
 import "buefy/dist/buefy.css";
 import "@/scss/main.scss";
+import _ from "lodash";
+import firebaseService from "@/services/firebase-service";
 
 Vue.use(Buefy);
 Vue.config.productionTip = false;
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount("#app");
+let app = {};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseService());
+
+firebase.auth().onAuthStateChanged(() => {
+  if (_.isEmpty(app)) {
+    app = new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount("#app");
+  }
+});
