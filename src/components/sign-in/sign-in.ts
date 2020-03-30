@@ -8,9 +8,9 @@ import firebase from "firebase";
 })
 export default class SignIn extends Vue {
   // Data property
-  public database?: any; // Ce type e asta?
-  public usersRef?: any;
-  public categoriesRef?: any;
+  private database?: any; // Ce type e asta?
+  private usersRef?: any;
+  private categoriesRef?: any;
   public email = "";
   public password = "";
   public name = "";
