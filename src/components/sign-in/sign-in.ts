@@ -44,14 +44,6 @@ export default class SignIn extends Vue {
       gender: this.gender,
       location: this.location
     });
-    // .then(() => {
-    //   this.categoriesRef.child("users").set({
-    //     name: this.name,
-    //     username: this.username,
-    //     gender: this.gender,
-    //     location: this.location
-    //   });
-    // });
   }
 
   login() {
