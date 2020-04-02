@@ -1,0 +1,37 @@
+<div>
+  Settings
+  <div>Update your profile details</div>
+  <!-- Choose categories -->
+  <b-dropdown v-model="selectedOptions" multiple aria-role="list">
+    <button class="button is-primary" type="button" slot="trigger">
+      <span>Selected ({{ selectedOptions.length }})</span>
+      <b-icon icon="menu-down"></b-icon>
+    </button>
+
+    <b-dropdown-item
+      v-model="index"
+      aria-role="listitem"
+      :class="{'is-active': isActive(category)}"
+      v-for="(category, index) in categories"
+    >
+      <span>{{category.type}}</span>
+    </b-dropdown-item>
+  </b-dropdown>
+  <!-- Other details -->
+  <b-field label="Name">
+    <b-input type="text" v-model="user.name" placeholder="Name"> </b-input>
+  </b-field>
+  <b-field label="Username">
+    <b-input type="text" v-model="user.username" placeholder="Username">
+    </b-input>
+  </b-field>
+  <b-field label="Gender">
+    <b-input type="text" v-model="user.gender" placeholder="Gender"> </b-input>
+  </b-field>
+  <b-field label="Location">
+    <b-input type="text" v-model="user.location" placeholder="Location">
+    </b-input>
+  </b-field>
+
+  <button @click="updateProfile(user)">Update profile</button>
+</div>

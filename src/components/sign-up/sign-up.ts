@@ -28,8 +28,8 @@ export default class SignIn extends Vue {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.email, this.password)
-      .then(() => {
-        this.createProfile().then(() => {
+      .then(result => {
+        this.createProfile(result).then(() => {
           authService(this.email, this.password).then(result => {
             this.$router.push({ path: "dashboard" });
           });
@@ -37,8 +37,8 @@ export default class SignIn extends Vue {
       });
   }
 
-  createProfile() {
-    return this.usersRef.set({
+  createProfile(result: any) {
+    return this.usersRef.child(result.user.uid).set({
       name: this.name,
       username: this.username,
       gender: this.gender,
