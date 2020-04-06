@@ -1,22 +1,18 @@
 <div>
   Settings
   <div>Update your profile details</div>
-  <!-- Choose categories -->
-  <b-dropdown v-model="selectedOptions" multiple aria-role="list">
-    <button class="button is-primary" type="button" slot="trigger">
-      <span>Selected ({{ selectedOptions.length }})</span>
-      <b-icon icon="menu-down"></b-icon>
-    </button>
 
-    <b-dropdown-item
-      v-model="index"
-      aria-role="listitem"
-      :class="{'is-active': isActive(category)}"
-      v-for="(category, index) in categories"
-    >
-      <span>{{category.type}}</span>
-    </b-dropdown-item>
-  </b-dropdown>
+  <!-- Categories -->
+  <div
+    class="block"
+    v-for="(category, index) in categories"
+    @change="updateUserCategories(index)"
+  >
+    <b-checkbox v-model="selectedOptions" :native-value="index">
+      {{category.type}}
+    </b-checkbox>
+  </div>
+
   <!-- Other details -->
   <b-field label="Name">
     <b-input type="text" v-model="user.name" placeholder="Name"> </b-input>
