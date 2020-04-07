@@ -6,4 +6,10 @@ import firebase from "firebase";
   template: "search-partner.html",
   components: {}
 })
-export default class SearchPartner extends Vue {}
+export default class SearchPartner extends Vue {
+  //   public usersList?;
+  //   // Lifecycle hook
+  //   mounted() {
+  //     this.user = firebase.auth().currentUser;
+  //   }
+}

@@ -12,21 +12,10 @@ export default class Settings extends Vue {
   private categoriesRef?: any;
   private usersRef?: any;
   public categories: categoryObject[] = [];
-  public user = {
-    name: "",
-    username: "",
-    gender: "",
-    location: "",
-    categories: []
-  };
-  public userUid = "";
-  public categoryUserOptions = {
-    name: "",
-    username: "",
-    gender: "",
-    location: ""
-  };
+  public user: userObject = {};
+  public categoryUserOptions!: userProfileObject;
 
+  public userUid = "";
   public selectedOptions: {}[] = [];
   public updateObject?: any;
 
@@ -151,7 +140,10 @@ export default class Settings extends Vue {
     this.categoriesRef
       .child(categoryId + "/users/" + this.userUid)
       .set(this.categoryUserOptions);
-    this.user.categories.push({ categoryId: true });
+    if (categoryId != null) {
+      this.user.categories.push({ categoryId: true });
+    }
+
     this.$buefy.toast.open({
       message: "Category updated",
       position: "is-top-right",
