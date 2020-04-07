@@ -5,6 +5,7 @@ import Dashboard from "@/components/dashboard/dashboard.vue";
 import SignUp from "@/components/sign-up/sign-up.vue";
 import Login from "@/components/login/login.vue";
 import Settings from "@/components/settings/settings.vue";
+import SearchPartner from "@/components/search-partner/search-partner.vue";
 
 Vue.use(VueRouter);
 
@@ -35,6 +36,14 @@ const routes = [
     path: "/settings",
     name: "Settings",
     component: Settings,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/search",
+    name: "Search",
+    component: SearchPartner,
     meta: {
       requiresAuth: true
     }
