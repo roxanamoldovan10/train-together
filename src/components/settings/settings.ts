@@ -152,6 +152,11 @@ export default class Settings extends Vue {
       .child(categoryId + "/users/" + this.userUid)
       .set(this.categoryUserOptions);
     this.user.categories.push({ categoryId: true });
+    this.$buefy.toast.open({
+      message: "Category updated",
+      position: "is-top-right",
+      type: "is-success"
+    });
   }
 
   /**
@@ -166,5 +171,10 @@ export default class Settings extends Vue {
       .child(categoryId)
       .remove();
     this.categoriesRef.child(categoryId + "/users/" + this.userUid).remove();
+    this.$buefy.toast.open({
+      message: "Category removed",
+      position: "is-top-right",
+      type: "is-danger"
+    });
   }
 }
