@@ -21,7 +21,6 @@ export default class FindPartner extends Vue {
     this.usersRef = this.database.ref("users");
     this.getUserDetails();
     this.getCategoriesList();
-    console.log(this.categories);
   }
 
   /**
@@ -63,7 +62,6 @@ export default class FindPartner extends Vue {
           active: true,
           name: this.categories[key].type
         };
-        console.log("baba", this.selectedCaterogies);
       }
     });
   }
