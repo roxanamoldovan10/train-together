@@ -4,7 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/dashboard">Dashboard</router-link> |
       <router-link to="/settings">Settings</router-link> |
-      <router-link to="/search">Search</router-link>
+      <router-link to="/find">Find</router-link>
     </div>
     <router-view />
   </div>

@@ -5,7 +5,7 @@ import Dashboard from "@/components/dashboard/dashboard.vue";
 import SignUp from "@/components/sign-up/sign-up.vue";
 import Login from "@/components/login/login.vue";
 import Settings from "@/components/settings/settings.vue";
-import SearchPartner from "@/components/search-partner/search-partner.vue";
+import FindPartner from "@/components/find-partner/find-partner.vue";
 
 Vue.use(VueRouter);
 
@@ -41,9 +41,9 @@ const routes = [
     }
   },
   {
-    path: "/search",
-    name: "Search",
-    component: SearchPartner,
+    path: "/find",
+    name: "FindPartner",
+    component: FindPartner,
     meta: {
       requiresAuth: true
     }

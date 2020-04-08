@@ -35,6 +35,7 @@ export default class Settings extends Vue {
     this.categoriesRef.on("value", (snapshot: any) => {
       if (snapshot) {
         this.categories = { ...snapshot.val() };
+        sessionStorage.setItem("categories", JSON.stringify(this.categories));
       }
     });
   }
@@ -49,6 +50,7 @@ export default class Settings extends Vue {
       this.usersRef.child(user.uid).once("value", (snapshot: any) => {
         if (snapshot) {
           this.user = snapshot.val();
+          sessionStorage.setItem("user", JSON.stringify(this.user));
           this.categoryUserOptions = {
             name: this.user.name,
             username: this.user.username,
@@ -142,6 +144,7 @@ export default class Settings extends Vue {
       .set(this.categoryUserOptions);
     if (categoryId != null) {
       this.user.categories.push({ categoryId: true });
+      sessionStorage.setItem("user", JSON.stringify(this.user));
     }
 
     this.$buefy.toast.open({
@@ -163,6 +166,8 @@ export default class Settings extends Vue {
       .child(categoryId)
       .remove();
     this.categoriesRef.child(categoryId + "/users/" + this.userUid).remove();
+    // this.user.categories.splice(categoryId, 1);
+    sessionStorage.setItem("user", JSON.stringify(this.user));
     this.$buefy.toast.open({
       message: "Category removed",
       position: "is-top-right",
