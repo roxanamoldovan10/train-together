@@ -9,19 +9,46 @@ import firebase from "firebase";
 export default class FindPartner extends Vue {
   private database?: any;
   private categoriesRef?: any;
+  private usersRef?: any;
   public user: userObject = {};
   public categories: categoryObject[] = [];
   public selectedCaterogies: {}[] = [];
+  public userUid = "";
   // Lifecycle hook
   mounted() {
     this.database = firebase.database();
     this.categoriesRef = this.database.ref("categories");
-    this.user = JSON.parse(sessionStorage.user);
-    this.categories = JSON.parse(sessionStorage.categories);
+    this.usersRef = this.database.ref("users");
+    this.getUserDetails();
+    this.getCategoriesList();
     console.log(this.categories);
-    if (this.user && this.user.categories) {
-      this.getUsersCategories();
+  }
+
+  /**
+   * Request for current user deatils
+   */
+  getUserDetails() {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      this.userUid = user.uid;
+      this.usersRef.child(user.uid).once("value", (snapshot: any) => {
+        if (snapshot) {
+          this.user = snapshot.val();
+          this.getUsersCategories();
+        }
+      });
     }
+  }
+
+  /**
+   * Request for list of categories
+   */
+  getCategoriesList() {
+    this.categoriesRef.on("value", (snapshot: any) => {
+      if (snapshot) {
+        this.categories = { ...snapshot.val() };
+      }
+    });
   }
 
   getUsersCategories() {
@@ -36,6 +63,7 @@ export default class FindPartner extends Vue {
           active: true,
           name: this.categories[key].type
         };
+        console.log("baba", this.selectedCaterogies);
       }
     });
   }

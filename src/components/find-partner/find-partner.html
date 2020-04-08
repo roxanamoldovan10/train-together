@@ -1,4 +1,4 @@
-<div class="container">
+<div>
   <div>Categories:</div>
   <div class="field" v-for="(user, index) in user.categories">
     <b-tag
@@ -12,8 +12,8 @@
     </b-tag>
   </div>
 
-  <div v-if="categories.length">
-    <div v-for="(categ,index) in categories" v-if="selectedCaterogies[index]">
+  <div v-if="categories">
+    <div v-for="(categ, index) in categories" v-if="selectedCaterogies[index]">
       <strong>{{categ.type}}</strong>
 
       <div
