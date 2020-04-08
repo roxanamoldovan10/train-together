@@ -1,4 +1,4 @@
-<div>
+<div class="container">
   <div>Categories:</div>
   <div class="field" v-for="(user, index) in user.categories">
     <b-tag
@@ -12,17 +12,23 @@
     </b-tag>
   </div>
 
-  <div v-for="(categ,index) in categories" v-if="selectedCaterogies[index]">
-    <strong>{{categ.type}}</strong>
+  <div v-if="categories.length">
+    <div v-for="(categ,index) in categories" v-if="selectedCaterogies[index]">
+      <strong>{{categ.type}}</strong>
 
-    <div
-      v-for="userByCateg in categ.users"
-      v-if="userByCateg.name !== user.name"
-    >
-      <span>
-        {{userByCateg.name}} | {{userByCateg.gender}} | {{userByCateg.location}}
-      </span>
-      <b-button>Contact</b-button>
+      <div
+        v-for="userByCateg in categ.users"
+        v-if="userByCateg.name !== user.name"
+      >
+        <span>
+          {{userByCateg.name}} | {{userByCateg.gender}} |
+          {{userByCateg.location}}
+        </span>
+        <b-button>Contact</b-button>
+      </div>
+    </div>
+    <div v-else>
+      No users in your categories
     </div>
   </div>
 </div>

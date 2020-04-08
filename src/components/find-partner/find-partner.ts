@@ -7,7 +7,6 @@ import firebase from "firebase";
   components: {}
 })
 export default class FindPartner extends Vue {
-  public usersList?;
   private database?: any;
   private categoriesRef?: any;
   public user: userObject = {};
@@ -20,7 +19,9 @@ export default class FindPartner extends Vue {
     this.user = JSON.parse(sessionStorage.user);
     this.categories = JSON.parse(sessionStorage.categories);
     console.log(this.categories);
-    this.getUsersCategories();
+    if (this.user && this.user.categories) {
+      this.getUsersCategories();
+    }
   }
 
   getUsersCategories() {
@@ -41,5 +42,6 @@ export default class FindPartner extends Vue {
 
   removeSelectedCategory(index: number) {
     this.selectedCaterogies.splice(index, 1);
+    console.log(this.selectedCaterogies);
   }
 }
