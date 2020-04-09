@@ -16,7 +16,7 @@ export default class Settings extends Vue {
   public user = {} as UserObject;
   public categoryUserOptions!: UserProfileObject;
 
-  public userUid = "";
+  public userUid = '';
   public selectedOptions: {}[] = [];
   public updateObject?: any;
 
@@ -144,11 +144,6 @@ export default class Settings extends Vue {
     if (categoryId != null) {
       this.user.categories.push({ categoryId: true });
     }
-<<<<<<< HEAD
-
-=======
-    this.user.categories.push({ categoryId: true });
->>>>>>> develop
     this.$buefy.toast.open({
       message: 'Category updated',
       position: 'is-top-right',
@@ -167,12 +162,7 @@ export default class Settings extends Vue {
       .child(this.userUid + '/categories/')
       .child(categoryId)
       .remove();
-<<<<<<< HEAD
-    this.categoriesRef.child(categoryId + "/users/" + this.userUid).remove();
-    // this.user.categories.splice(categoryId, 1);
-=======
     this.categoriesRef.child(categoryId + '/users/' + this.userUid).remove();
->>>>>>> develop
     this.$buefy.toast.open({
       message: 'Category removed',
       position: 'is-top-right',
