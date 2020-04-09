@@ -16,7 +16,6 @@ export default class Settings extends Vue {
   public user = {} as UserObject;
   public categoryUserOptions!: UserProfileObject;
 
-  public userUid = '';
   public selectedOptions: {}[] = [];
   public updateObject?: any;
 
