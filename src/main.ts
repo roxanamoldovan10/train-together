@@ -1,13 +1,13 @@
-import Vue from "vue";
-import App from "./App.vue";
-import firebase from "firebase";
-import router from "./router";
-import store from "./store";
-import Buefy from "buefy";
-import "buefy/dist/buefy.css";
-import "@/scss/main.scss";
-import _ from "lodash";
-import firebaseService from "@/services/firebase-service";
+import Vue from 'vue';
+import App from './App.vue';
+import firebase from 'firebase';
+import router from './router';
+import store from './store';
+import Buefy from 'buefy';
+import 'buefy/dist/buefy.css';
+import '@/scss/main.scss';
+import _ from 'lodash';
+import firebaseService from '@/services/firebase-service';
 
 Vue.use(Buefy);
 Vue.config.productionTip = false;
@@ -22,7 +22,7 @@ firebase.auth().onAuthStateChanged(() => {
     app = new Vue({
       router,
       store,
-      render: h => h(App)
-    }).$mount("#app");
+      render: (h) => h(App),
+    }).$mount('#app');
   }
 });

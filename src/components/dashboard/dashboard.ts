@@ -1,10 +1,10 @@
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import firebase from "firebase";
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import firebase from 'firebase';
 
 @Component({
-  template: "./dashboard.html",
-  components: {}
+  template: './dashboard.html',
+  components: {},
 })
 export default class Dashboard extends Vue {
   // Data property
@@ -12,7 +12,7 @@ export default class Dashboard extends Vue {
 
   // Lifecycle hook
   mounted() {
-    console.log("The About component was mounted");
+    console.log('The About component was mounted');
   }
 
   logout() {
@@ -20,7 +20,7 @@ export default class Dashboard extends Vue {
       .auth()
       .signOut()
       .then(() => {
-        this.$router.replace("login");
+        this.$router.replace('login');
       });
   }
 }

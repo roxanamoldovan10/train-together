@@ -1,19 +1,20 @@
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import firebase from "firebase";
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import firebase from 'firebase';
 
 @Component({
-  template: "./settings.html",
-  components: {}
+  template: './settings.html',
+  components: {},
 })
 export default class Settings extends Vue {
   // Data property
-  private database?: any;
+  private database: any;
   private categoriesRef?: any;
   private usersRef?: any;
-  public categories: categoryObject[] = [];
-  public user: userObject = {};
-  public categoryUserOptions!: userProfileObject;
+  public categories: CategoryObject[] = [];
+  public userUid = '';
+  public user = {} as UserObject;
+  public categoryUserOptions!: UserProfileObject;
 
   public userUid = "";
   public selectedOptions: {}[] = [];
@@ -22,8 +23,8 @@ export default class Settings extends Vue {
   // Lifecycle hook
   mounted() {
     this.database = firebase.database();
-    this.categoriesRef = this.database.ref("categories");
-    this.usersRef = this.database.ref("users");
+    this.categoriesRef = this.database.ref('categories');
+    this.usersRef = this.database.ref('users');
     this.getCategoriesList();
     this.getUserDetails();
   }
@@ -32,7 +33,7 @@ export default class Settings extends Vue {
    * Request for list of categories
    */
   getCategoriesList() {
-    this.categoriesRef.on("value", (snapshot: any) => {
+    this.categoriesRef.on('value', (snapshot: any) => {
       if (snapshot) {
         this.categories = { ...snapshot.val() };
       }
@@ -46,14 +47,14 @@ export default class Settings extends Vue {
     const user = firebase.auth().currentUser;
     if (user) {
       this.userUid = user.uid;
-      this.usersRef.child(user.uid).once("value", (snapshot: any) => {
+      this.usersRef.child(user.uid).once('value', (snapshot: any) => {
         if (snapshot) {
           this.user = snapshot.val();
           this.categoryUserOptions = {
             name: this.user.name,
             username: this.user.username,
             gender: this.user.gender,
-            location: this.user.location
+            location: this.user.location,
           };
           if (this.user.categories) {
             this.getUserSelectedCategories();
@@ -86,7 +87,7 @@ export default class Settings extends Vue {
       name: this.user.name,
       username: this.user.username,
       gender: this.user.gender,
-      location: this.user.location
+      location: this.user.location,
     };
 
     const userOptions = {
@@ -94,13 +95,13 @@ export default class Settings extends Vue {
       username: username,
       gender: gender,
       location: location,
-      categories: this.user.categories
+      categories: this.user.categories,
     };
 
     // Bulk update user and categories db objects
     if (this.user.categories) {
       const userCategories = Object.keys(this.user.categories);
-      userCategories.forEach(key => {
+      userCategories.forEach((key) => {
         this.updateObject[
           `categories/${key}/users/${this.userUid}`
         ] = this.categoryUserOptions;
@@ -116,8 +117,8 @@ export default class Settings extends Vue {
    */
   updateUserCategories(index: string) {
     const categoryId = parseInt(index);
-    const isSelected = this.selectedOptions.some(selected => {
-      if (typeof selected === "string") selected = parseInt(selected);
+    const isSelected = this.selectedOptions.some((selected) => {
+      if (typeof selected === 'string') selected = parseInt(selected);
       return selected === categoryId;
     });
 
@@ -134,20 +135,24 @@ export default class Settings extends Vue {
    */
   addUserCategory(categoryId: number) {
     this.usersRef
-      .child(this.userUid + "/categories/")
+      .child(this.userUid + '/categories/')
       .child(categoryId)
       .set(true);
     this.categoriesRef
-      .child(categoryId + "/users/" + this.userUid)
+      .child(categoryId + '/users/' + this.userUid)
       .set(this.categoryUserOptions);
     if (categoryId != null) {
       this.user.categories.push({ categoryId: true });
     }
+<<<<<<< HEAD
 
+=======
+    this.user.categories.push({ categoryId: true });
+>>>>>>> develop
     this.$buefy.toast.open({
-      message: "Category updated",
-      position: "is-top-right",
-      type: "is-success"
+      message: 'Category updated',
+      position: 'is-top-right',
+      type: 'is-success',
     });
   }
 
@@ -159,15 +164,19 @@ export default class Settings extends Vue {
   removeUserCategory(categoryId: number) {
     // messagesRef.child(message.id).remove()
     this.usersRef
-      .child(this.userUid + "/categories/")
+      .child(this.userUid + '/categories/')
       .child(categoryId)
       .remove();
+<<<<<<< HEAD
     this.categoriesRef.child(categoryId + "/users/" + this.userUid).remove();
     // this.user.categories.splice(categoryId, 1);
+=======
+    this.categoriesRef.child(categoryId + '/users/' + this.userUid).remove();
+>>>>>>> develop
     this.$buefy.toast.open({
-      message: "Category removed",
-      position: "is-top-right",
-      type: "is-danger"
+      message: 'Category removed',
+      position: 'is-top-right',
+      type: 'is-danger',
     });
   }
 }

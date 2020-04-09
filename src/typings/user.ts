@@ -1,16 +1,16 @@
-interface categoryObject {
+interface CategoryObject {
   description: string;
   type: string;
   users: object;
 }
 
-interface userProfileObject {
+interface UserProfileObject {
   name: string;
   username: string;
   gender: string;
   location: string;
 }
 
-interface userObject extends userProfileObject {
+interface UserObject extends UserProfileObject {
   categories: [object];
 }
