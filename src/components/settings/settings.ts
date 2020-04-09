@@ -49,13 +49,14 @@ export default class Settings extends Vue {
       this.usersRef.child(user.uid).once('value', (snapshot: any) => {
         if (snapshot) {
           this.user = snapshot.val();
+          this.user.categories = this.user.categories || [];
           this.categoryUserOptions = {
             name: this.user.name,
             username: this.user.username,
             gender: this.user.gender,
             location: this.user.location,
           };
-          if (this.user.categories) {
+          if (this.user.categories.length) {
             this.getUserSelectedCategories();
           }
         }
@@ -78,9 +79,7 @@ export default class Settings extends Vue {
    * @returns {Promise}
    */
   updateProfile({ username, name, gender, location }: any) {
-    // aSTEA CE TYPE IS???
     this.updateObject = {};
-    this.user.categories = this.user.categories || [];
 
     this.categoryUserOptions = {
       name: this.user.name,

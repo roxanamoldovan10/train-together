@@ -1,19 +1,19 @@
-<div>
+<div v-if="categories">
   <div>Categories:</div>
   <div class="field" v-for="(user, index) in user.categories">
     <b-tag
-      v-if="selectedCaterogies[index]"
+      v-if="selectedCategories[index]"
       type="is-primary"
       closable
       aria-close-label="Close tag"
       @close="removeSelectedCategory(index)"
     >
-      {{selectedCaterogies[index].name}}
+      {{selectedCategories[index].name}}
     </b-tag>
   </div>
 
   <div v-if="categories">
-    <div v-for="(categ, index) in categories" v-if="selectedCaterogies[index]">
+    <div v-for="(categ, index) in categories" v-if="hasCateg(index)">
       <strong>{{categ.type}}</strong>
 
       <div
@@ -26,9 +26,9 @@
         </span>
         <b-button>Contact</b-button>
       </div>
-    </div>
-    <div v-else>
-      No users in your categories
+      <div v-else>
+        No users in this category
+      </div>
     </div>
   </div>
 </div>
