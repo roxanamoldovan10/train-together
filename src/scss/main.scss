@@ -12,3 +12,11 @@ body,
 .main-section {
   margin-top: 8%;
 }
+
+.navbar {
+  padding: 20px 0px;
+  .navbar-item {
+    height: 50px;
+    justify-content: center;
+  }
+}
