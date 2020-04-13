@@ -1,19 +1,21 @@
 <div v-if="categories">
   <div>Categories:</div>
-  <div class="field" v-for="(user, index) in user.categories">
-    <b-tag
-      v-if="selectedCategories[index]"
-      type="is-primary"
-      closable
-      aria-close-label="Close tag"
-      @close="removeSelectedCategory(index)"
-    >
-      {{selectedCategories[index].name}}
-    </b-tag>
+  <div v-for="(categoryItem, index) in categories">
+    <span @click="updateCategoriesList(index)">
+      <b-tag :type="getType(index)">{{categoryItem.type}}</b-tag>
+    </span>
+  </div>
+  <div v-for="(userCategory, index) in user.categories">
+    {{userCategory}} {{index}}
   </div>
 
-  <div v-if="categories">
-    <div v-for="(categ, index) in categories" v-if="hasCateg(index)">
+  <!-- users for all categories  -->
+  <div v-if="userSelectedCategories.length">
+    <!-- bla {{userSelectedCategories[0].type}} -->
+    <div
+      v-for="(categ, index) in userSelectedCategories"
+      v-if="categ && categ.type && categ.users"
+    >
       <strong>{{categ.type}}</strong>
 
       <div
@@ -26,7 +28,7 @@
         </span>
         <b-button>Contact</b-button>
       </div>
-      <div v-else>
+      <div v-if="categ.users.length === 0">
         No users in this category
       </div>
     </div>

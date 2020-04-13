@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import firebase from 'firebase';
 import _ from 'lodash';
+import { parse } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   template: 'find-partner.html',
@@ -13,7 +14,7 @@ export default class FindPartner extends Vue {
   private usersRef?: any;
   public user = {} as UserObject;
   public categories: CategoryObject[] = [];
-  public selectedCategories: {}[] = [];
+  public userSelectedCategories: CategoryObject[] = [];
   public userUid = '';
   // Lifecycle hook
   mounted() {
@@ -35,29 +36,10 @@ export default class FindPartner extends Vue {
         if (snapshot) {
           this.user = snapshot.val();
           this.user.categories = this.user.categories || [];
-          this.getUsersCategories();
+          this.getUserselectedCategories();
         }
       });
     }
-  }
-
-  /**
-   *
-   */
-  getUsersCategories() {
-    const userCategoriesKeys = Object.keys(this.user.categories).map(Number);
-    userCategoriesKeys.forEach((key) => {
-      if (
-        this.categories[key] !== undefined &&
-        this.categories[key].type !== undefined
-      ) {
-        this.selectedCategories[key] = {
-          id: key,
-          active: true,
-          name: this.categories[key].type,
-        };
-      }
-    });
   }
 
   /**
@@ -66,18 +48,40 @@ export default class FindPartner extends Vue {
   getCategoriesList() {
     this.categoriesRef.on('value', (snapshot: any) => {
       if (snapshot) {
-        this.categories = { ...snapshot.val() };
+        this.categories = snapshot.val();
       }
     });
   }
 
-  removeSelectedCategory(index: number) {
-    this.selectedCategories.splice(index, 1);
+  /**
+   * Returns user initial categories (by his selected categories)
+   */
+  getUserselectedCategories() {
+    const userCategoriesKeys = Object.keys(this.user.categories);
+    Object.keys(this.categories).forEach((categoryKey: string) => {
+      const userHasCategory = userCategoriesKeys.some(
+        (categ) => categ === categoryKey,
+      );
+      if (userHasCategory) {
+        this.userSelectedCategories[categoryKey] = this.categories[categoryKey];
+      }
+    });
   }
 
-  hasCateg(index: any) {
-    return this.selectedCategories.some((selected: any) => {
-      return selected.id === parseInt(index);
-    });
+  getType(index: string) {
+    if (this.user && this.user.categories) {
+      const userHasCateg = Object.keys(this.user.categories).some(
+        (userCateg) => userCateg === index,
+      );
+      if (!userHasCateg) return '';
+      // this.selectedCategories.push(index);
+
+      return userHasCateg ? 'is-primary' : '';
+    }
+  }
+
+  updateCategoriesList(index: number) {
+    this.userSelectedCategories[index] = this.categories[index];
+    console.log(this.userSelectedCategories);
   }
 }
