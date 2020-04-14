@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { namespace } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
-import firebase from 'firebase';
+import firebaseConfig from '@/services/firebase-config';
 import { CommonMutations } from '../../typings/common';
 
 const commonModule = namespace('commonModule');
@@ -24,11 +24,8 @@ export default class Dashboard extends Vue {
   }
 
   logout() {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        this.$router.replace('login');
-      });
+    firebaseConfig.auth.signOut().then(() => {
+      this.$router.replace('login');
+    });
   }
 }
