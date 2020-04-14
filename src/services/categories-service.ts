@@ -1,17 +1,14 @@
-import firebase from 'firebase';
+import firebaseConfig from '@/services/firebase-config';
 
 export default class CategoriesService {
-  public database = firebase.database();
-  public categoriesRef = this.database.ref('categories');
-
   public async getAvailableCategories() {
-    this.categoriesRef.on('value', (snapshot: any) => {
+    let data: CategoryObject[] = [];
+    await firebaseConfig.categoriesRef.once('value', (snapshot: any) => {
       if (snapshot) {
-        console.log(snapshot);
-        return snapshot.val();
+        data = snapshot.val();
       }
-      return {};
     });
+    return data;
   }
 }
 

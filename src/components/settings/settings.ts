@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import firebase from 'firebase';
+import categoriesService from '@/services/categories-service';
 
 @Component({
   template: './settings.html',
@@ -32,10 +33,8 @@ export default class Settings extends Vue {
    * Request for list of categories
    */
   getCategoriesList() {
-    this.categoriesRef.on('value', (snapshot: any) => {
-      if (snapshot) {
-        this.categories = { ...snapshot.val() };
-      }
+    new categoriesService().getAvailableCategories().then((result) => {
+      this.categories = result;
     });
   }
 
