@@ -7,7 +7,9 @@
       <router-link to="/settings" class="navbar-item">
         <font-awesome-icon icon="cog"></font-awesome-icon>
       </router-link>
-      <router-link to="/find">Find</router-link>
+      <router-link to="/find" class="navbar-item">
+        <font-awesome-icon icon="search"></font-awesome-icon>
+      </router-link>
     </div>
     <div class="column main-section">
       <div class="columns">

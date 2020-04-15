@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import categoriesService from '@/services/categories-service';
 import usersService from '@/services/users-service';
 import firebaseConfig from '@/services/firebase-config';
 import CategoriesService from '@/services/categories-service';
@@ -33,9 +32,11 @@ export default class Settings extends Vue {
    * Request for list of categories
    */
   getCategoriesList() {
-    new categoriesService().getAvailableCategories().then((result) => {
-      this.categories = result;
-    });
+    this.categoriesService
+      .getAvailableCategories()
+      .then((result: CategoryObject[]) => {
+        this.categories = result;
+      });
   }
 
   /**

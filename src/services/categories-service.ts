@@ -26,6 +26,18 @@ export default class CategoriesService {
       .child(categoryId + '/users/' + userUid)
       .remove();
   }
+
+  public async getCategoryById(id: string) {
+    let data: CategoryObject[] = [];
+    await firebaseConfig.categoriesRef
+      .child(id)
+      .once('value', (snapshot: any) => {
+        if (snapshot) {
+          data = snapshot.val();
+        }
+      });
+    return data;
+  }
 }
 
 export const categoriesService = new CategoriesService();

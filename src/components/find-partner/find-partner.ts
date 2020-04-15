@@ -1,87 +1,52 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import firebase from 'firebase';
-import _ from 'lodash';
-import { parse } from '@fortawesome/fontawesome-svg-core';
+import firebaseConfig from '@/services/firebase-config';
+import CategoriesService from '@/services/categories-service';
 
 @Component({
-  template: 'find-partner.html',
-  components: {},
+  template: './find-partner.html',
 })
 export default class FindPartner extends Vue {
-  private database: any;
-  private categoriesRef?: any;
-  private usersRef?: any;
-  public user = {} as UserObject;
+  // Data property
+  private categoriesService?: any;
   public categories: CategoryObject[] = [];
+  public userSelectedFilters: [] = [];
   public userSelectedCategories: CategoryObject[] = [];
-  public userUid = '';
+
   // Lifecycle hook
   mounted() {
-    this.database = firebase.database();
-    this.categoriesRef = this.database.ref('categories');
-    this.usersRef = this.database.ref('users');
-    this.getUserDetails();
+    this.categoriesService = new CategoriesService();
+    this.userSelectedFilters = [];
     this.getCategoriesList();
-  }
-
-  /**
-   * Request for current user deatils
-   */
-  getUserDetails() {
-    const user = firebase.auth().currentUser;
-    if (user) {
-      this.userUid = user.uid;
-      this.usersRef.child(user.uid).once('value', (snapshot: any) => {
-        if (snapshot) {
-          this.user = snapshot.val();
-          this.user.categories = this.user.categories || [];
-          this.getUserselectedCategories();
-        }
-      });
-    }
   }
 
   /**
    * Request for list of categories
    */
   getCategoriesList() {
-    this.categoriesRef.on('value', (snapshot: any) => {
-      if (snapshot) {
-        this.categories = snapshot.val();
-      }
-    });
-  }
-
-  /**
-   * Returns user initial categories (by his selected categories)
-   */
-  getUserselectedCategories() {
-    const userCategoriesKeys = Object.keys(this.user.categories);
-    Object.keys(this.categories).forEach((categoryKey: string) => {
-      const userHasCategory = userCategoriesKeys.some(
-        (categ) => categ === categoryKey,
-      );
-      if (userHasCategory) {
-        this.userSelectedCategories[categoryKey] = this.categories[categoryKey];
-      }
-    });
-  }
-
-  getType(index: string) {
-    if (this.user && this.user.categories) {
-      const userHasCateg = Object.keys(this.user.categories).some(
-        (userCateg) => userCateg === index,
-      );
-      if (!userHasCateg) return '';
-      // this.selectedCategories.push(index);
-
-      return userHasCateg ? 'is-primary' : '';
-    }
+    this.categoriesService
+      .getAvailableCategories()
+      .then((result: CategoryObject[]) => {
+        this.categories = result;
+      });
   }
 
   updateCategoriesList(index: number) {
-    this.userSelectedCategories[index] = this.categories[index];
-    console.log(this.userSelectedCategories);
+    if (this.userSelectedFilters[index] === index) {
+      return this.userSelectedFilters.splice(index, 1);
+    }
+    this.userSelectedFilters.push(index);
+  }
+
+  //   !!! Should do request for new selected filters
+  updateFilters() {
+    this.userSelectedCategories = [];
+    this.userSelectedFilters.forEach((id) => {
+      this.categoriesService
+        .getCategoryById(id)
+        .then((result: CategoryObject[]) => {
+          this.userSelectedCategories.push(result);
+        });
+    });
   }
 }

@@ -8,10 +8,10 @@ import 'buefy/dist/buefy.css';
 import '@/scss/main.scss';
 import _ from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faCog, faHome);
+library.add(faCog, faHome, faSearch);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(Buefy);

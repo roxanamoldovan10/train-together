@@ -1,36 +1,20 @@
-<div v-if="categories">
+<div>
   <div>Categories:</div>
   <div v-for="(categoryItem, index) in categories">
     <span @click="updateCategoriesList(index)">
-      <b-tag :type="getType(index)">{{categoryItem.type}}</b-tag>
+      <b-tag :key="index">{{categoryItem.type}}</b-tag>
     </span>
   </div>
-  <div v-for="(userCategory, index) in user.categories">
-    {{userCategory}} {{index}}
-  </div>
+  <b-button @click="updateFilters()" type="is-primary">Filter</b-button>
 
-  <!-- users for all categories  -->
-  <div v-if="userSelectedCategories.length">
-    <!-- bla {{userSelectedCategories[0].type}} -->
-    <div
-      v-for="(categ, index) in userSelectedCategories"
-      v-if="categ && categ.type && categ.users"
-    >
-      <strong>{{categ.type}}</strong>
-
-      <div
-        v-for="userByCateg in categ.users"
-        v-if="userByCateg.name !== user.name"
-      >
-        <span>
-          {{userByCateg.name}} | {{userByCateg.gender}} |
-          {{userByCateg.location}}
-        </span>
-        <b-button>Contact</b-button>
-      </div>
-      <div v-if="categ.users.length === 0">
-        No users in this category
-      </div>
+  <!-- User selected categories -->
+  <div
+    v-if="userSelectedCategories"
+    v-for="(userCategory, index) in userSelectedCategories"
+  >
+    <strong>{{userCategory.type}} </strong>
+    <div v-for="(user, index) in userCategory.users">
+      {{user.name}}
     </div>
   </div>
 </div>
