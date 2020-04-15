@@ -10,6 +10,22 @@ export default class CategoriesService {
     });
     return data;
   }
+
+  public addUserToCategory(
+    categoryId: string,
+    userUid: string,
+    categoryUserOptions: UserProfileObject,
+  ) {
+    firebaseConfig.categoriesRef
+      .child(categoryId + '/users/' + userUid)
+      .set(categoryUserOptions);
+  }
+
+  public removeUserFromCategory(categoryId: string, userUid: string) {
+    firebaseConfig.categoriesRef
+      .child(categoryId + '/users/' + userUid)
+      .remove();
+  }
 }
 
 export const categoriesService = new CategoriesService();

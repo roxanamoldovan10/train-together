@@ -16,7 +16,8 @@ const auth = firebase.auth();
 const currentUser = auth.currentUser;
 
 // firebase refferences
+const databaseRef = db.ref();
 const usersRef = db.ref('users');
 const categoriesRef = db.ref('categories');
 
-export default { db, auth, currentUser, usersRef, categoriesRef };
+export default { db, auth, currentUser, databaseRef, usersRef, categoriesRef };
