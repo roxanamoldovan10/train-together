@@ -12,5 +12,5 @@ interface UserProfileObject {
 }
 
 interface UserObject extends UserProfileObject {
-  categories: [object];
+  categories: [{}];
 }

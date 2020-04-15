@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import firebase from 'firebase';
+import categoriesService from '@/services/categories-service';
+import usersService from '@/services/users-service';
+import firebaseConfig from '@/services/firebase-config';
+import CategoriesService from '@/services/categories-service';
 
 @Component({
   template: './settings.html',
@@ -8,9 +11,8 @@ import firebase from 'firebase';
 })
 export default class Settings extends Vue {
   // Data property
-  private database: any;
-  private categoriesRef?: any;
-  private usersRef?: any;
+  private categoriesService?: any;
+  private usersService?: any;
   public categories: CategoryObject[] = [];
   public userUid = '';
   public user = {} as UserObject;
@@ -21,9 +23,8 @@ export default class Settings extends Vue {
 
   // Lifecycle hook
   mounted() {
-    this.database = firebase.database();
-    this.categoriesRef = this.database.ref('categories');
-    this.usersRef = this.database.ref('users');
+    this.categoriesService = new CategoriesService();
+    this.usersService = new usersService();
     this.getCategoriesList();
     this.getUserDetails();
   }
@@ -32,10 +33,8 @@ export default class Settings extends Vue {
    * Request for list of categories
    */
   getCategoriesList() {
-    this.categoriesRef.on('value', (snapshot: any) => {
-      if (snapshot) {
-        this.categories = { ...snapshot.val() };
-      }
+    new categoriesService().getAvailableCategories().then((result) => {
+      this.categories = result;
     });
   }
 
@@ -43,24 +42,25 @@ export default class Settings extends Vue {
    * Request for current user deatils
    */
   getUserDetails() {
-    const user = firebase.auth().currentUser;
+    const user = firebaseConfig.auth.currentUser;
     if (user) {
       this.userUid = user.uid;
-      this.usersRef.child(user.uid).once('value', (snapshot: any) => {
-        if (snapshot) {
-          this.user = snapshot.val();
-          this.user.categories = this.user.categories || [];
-          this.categoryUserOptions = {
-            name: this.user.name,
-            username: this.user.username,
-            gender: this.user.gender,
-            location: this.user.location,
-          };
-          if (this.user.categories.length) {
-            this.getUserSelectedCategories();
+      this.usersService
+        .getCurrentUser(this.userUid)
+        .then((result: UserObject) => {
+          if (result) {
+            this.user = result;
+            this.categoryUserOptions = {
+              name: this.user.name,
+              username: this.user.username,
+              gender: this.user.gender,
+              location: this.user.location,
+            };
+            if (this.user.categories) {
+              this.getUserSelectedCategories();
+            }
           }
-        }
-      });
+        });
     }
   }
 
@@ -79,7 +79,7 @@ export default class Settings extends Vue {
    * @returns {Promise}
    */
   updateProfile({ username, name, gender, location }: any) {
-    this.updateObject = {};
+    this.user.categories = this.user.categories || [];
 
     this.categoryUserOptions = {
       name: this.user.name,
@@ -99,15 +99,13 @@ export default class Settings extends Vue {
     // Bulk update user and categories db objects
     if (this.user.categories) {
       const userCategories = Object.keys(this.user.categories);
-      userCategories.forEach((key) => {
-        this.updateObject[
-          `categories/${key}/users/${this.userUid}`
-        ] = this.categoryUserOptions;
-      });
+      this.usersService.updateBulkUserCategories(
+        userCategories,
+        this.userUid,
+        this.categoryUserOptions,
+        userOptions,
+      );
     }
-    this.updateObject[`users/${this.userUid}`] = userOptions;
-
-    return this.database.ref().update(this.updateObject);
   }
 
   /**
@@ -132,21 +130,20 @@ export default class Settings extends Vue {
    * @param categoryId
    */
   addUserCategory(categoryId: number) {
-    this.usersRef
-      .child(this.userUid + '/categories/')
-      .child(categoryId)
-      .set(true);
-    this.categoriesRef
-      .child(categoryId + '/users/' + this.userUid)
-      .set(this.categoryUserOptions);
+    this.usersService.addCategoryToUser(this.userUid, categoryId);
+    this.categoriesService.addUserToCategory(
+      categoryId,
+      this.userUid,
+      this.categoryUserOptions,
+    );
     if (categoryId != null) {
-      this.user.categories.push({ categoryId: true });
+      this.user.categories[categoryId] = true;
+      this.$buefy.toast.open({
+        message: 'Category updated',
+        position: 'is-top-right',
+        type: 'is-success',
+      });
     }
-    this.$buefy.toast.open({
-      message: 'Category updated',
-      position: 'is-top-right',
-      type: 'is-success',
-    });
   }
 
   /**
@@ -155,12 +152,8 @@ export default class Settings extends Vue {
    * @param categoryId
    */
   removeUserCategory(categoryId: number) {
-    // messagesRef.child(message.id).remove()
-    this.usersRef
-      .child(this.userUid + '/categories/')
-      .child(categoryId)
-      .remove();
-    this.categoriesRef.child(categoryId + '/users/' + this.userUid).remove();
+    this.usersService.removeUserFromCategory(this.userUid, categoryId);
+    this.categoriesService.removeUserFromCategory(categoryId, this.userUid);
     this.$buefy.toast.open({
       message: 'Category removed',
       position: 'is-top-right',

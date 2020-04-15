@@ -1,17 +1,13 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import firebase from 'firebase';
 import authService from '@/services/auth-service';
+import firebaseConfig from '@/services/firebase-config';
+import usersService from '@/services/users-service';
 
 @Component({
   template: './sign-up.html',
 })
 export default class SignIn extends Vue {
-  //eslint-disable-next-line
-	private database?: any;
-
-  //eslint-disable-next-line
-	private usersRef?: any;
   public email = '';
   public password = '';
   public name = '';
@@ -19,15 +15,8 @@ export default class SignIn extends Vue {
   public gender = '';
   public location = '';
 
-  // Lifecycle hook
-  mounted() {
-    this.database = firebase.database();
-    this.usersRef = this.database.ref('users');
-  }
-
   signUp() {
-    firebase
-      .auth()
+    firebaseConfig.auth
       .createUserWithEmailAndPassword(this.email, this.password)
       .then((result) => {
         this.createProfile(result).then(() => {
@@ -39,11 +28,13 @@ export default class SignIn extends Vue {
   }
 
   createProfile(result: any) {
-    return this.usersRef.child(result.user.uid).set({
+    const userDetails = {
       name: this.name,
       username: this.username,
       gender: this.gender,
       location: this.location,
-    });
+    };
+    const usersServiceInstance = new usersService();
+    return usersServiceInstance.createUserProfile(result.user.uid, userDetails);
   }
 }
