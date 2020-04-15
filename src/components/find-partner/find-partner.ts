@@ -10,13 +10,12 @@ export default class FindPartner extends Vue {
   // Data property
   private categoriesService?: any;
   public categories: CategoryObject[] = [];
-  public userSelectedFilters: [] = [];
+  public userSelectedFilters: [{}] = [{}];
   public userSelectedCategories: CategoryObject[] = [];
 
   // Lifecycle hook
   mounted() {
     this.categoriesService = new CategoriesService();
-    this.userSelectedFilters = [];
     this.getCategoriesList();
   }
 
@@ -44,7 +43,7 @@ export default class FindPartner extends Vue {
     this.userSelectedFilters.forEach((id) => {
       this.categoriesService
         .getCategoryById(id)
-        .then((result: CategoryObject[]) => {
+        .then((result: CategoryObject) => {
           this.userSelectedCategories.push(result);
         });
     });
