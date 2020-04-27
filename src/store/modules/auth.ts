@@ -19,12 +19,12 @@ const mutations: MutationTree<State> = {
 
 const actions: ActionTree<State, MainState> = {
   // Authentification
-  authentificateUser(
+  async authentificateUser(
     { state, commit }: ActionContext<State, MainState>,
     userCredentials,
   ) {
     try {
-      firebase.auth.signInWithEmailAndPassword(
+      await firebase.auth.signInWithEmailAndPassword(
         userCredentials.email,
         userCredentials.password,
       );
