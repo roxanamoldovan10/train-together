@@ -1,16 +1,14 @@
-interface CategoryObject {
-  description: string;
-  type: string;
-  users: object;
+export const enum userGetters {
+  GetUser = 'getUser',
+  GetUserId = 'getUserId',
 }
 
-interface UserProfileObject {
-  name: string;
-  username: string;
-  gender: string;
-  location: string;
+export const enum userMutations {
+  SetUser = 'setUser',
+  SetUserId = 'setUserId',
 }
 
-interface UserObject extends UserProfileObject {
-  categories: [{}];
+export const enum userActions {
+  CreateUserProfile = 'createUserProfile',
+  SetCurrentUser = 'setCurrentUser',
 }

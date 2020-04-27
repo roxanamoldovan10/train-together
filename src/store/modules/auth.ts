@@ -1,6 +1,6 @@
 import { GetterTree, MutationTree, ActionTree, ActionContext } from 'vuex';
 import { MainState } from '@/typings/store';
-import firebase from '@/services/firebase-config';
+import firebase from '@/config/firebase-config';
 export class State {
   public isAuthentificated = false;
 }
@@ -24,10 +24,15 @@ const actions: ActionTree<State, MainState> = {
     userCredentials,
   ) {
     try {
-      await firebase.auth.signInWithEmailAndPassword(
-        userCredentials.email,
-        userCredentials.password,
-      );
+      await firebase.auth
+        .signInWithEmailAndPassword(
+          userCredentials.email,
+          userCredentials.password,
+        )
+        .then((result) => {
+          if (!result || !result.user) return;
+          commit('userModule/setUserId', result.user.uid, { root: true });
+        });
       commit('setUserAuthState', true);
     } catch {
       throw Error('Could not fetch data');

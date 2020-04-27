@@ -1,6 +1,6 @@
 import { GetterTree, MutationTree, ActionTree, ActionContext } from 'vuex';
 import { MainState } from '@/typings/store';
-import firebase from '@/services/firebase-config';
+import firebase from '@/config/firebase-config';
 export class State {
   public user: UserObject = {} as UserObject;
   public userId = '';
@@ -11,6 +11,9 @@ const getters: GetterTree<State, any> = {
   getUser(state: State) {
     return state.user;
   },
+  getUserId(state: State) {
+    return state.userId;
+  },
 };
 
 const mutations: MutationTree<State> = {
@@ -19,7 +22,7 @@ const mutations: MutationTree<State> = {
 };
 
 const actions: ActionTree<State, MainState> = {
-  // Authentification
+  // Authentification | Sets users profile data + id
   async createUserProfile(
     { state, commit }: ActionContext<State, MainState>,
     userDetails,
@@ -44,14 +47,13 @@ const actions: ActionTree<State, MainState> = {
     }
   },
 
-  getCurrentUser({ state, commit }: ActionContext<State, MainState>, userId) {
-    let data: UserObject[] = [];
+  // Current user profile data
+  setCurrentUser({ state, commit }: ActionContext<State, MainState>, userId) {
     firebase.usersRef.child(userId).once('value', (snapshot: any) => {
       if (snapshot) {
-        data = snapshot.val();
+        commit('setUser', snapshot.val());
       }
     });
-    commit('setUser', data);
   },
 };
 

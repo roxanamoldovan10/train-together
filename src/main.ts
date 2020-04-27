@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import firebaseConfig from '@/services/firebase-config';
+import firebaseConfig from '@/config/firebase-config';
 import router from './router';
 import store from './store';
 import Buefy from 'buefy';

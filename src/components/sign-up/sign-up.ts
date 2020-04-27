@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import firebaseConfig from '@/services/firebase-config';
+import firebaseConfig from '@/config/firebase-config';
 
 import { namespace } from 'vuex-class';
 import { authActions } from '../../typings/auth';
-import { userActions } from '../../typings/user-typings';
+import { userActions } from '../../typings/user';
 
 const authModule = namespace('authModule');
 const userModule = namespace('userModule');

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import firebaseConfig from '@/services/firebase-config';
+import firebaseConfig from '@/config/firebase-config';
 
 @Component({
   template: './dashboard.html',
