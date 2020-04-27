@@ -23,8 +23,7 @@ const actions: ActionTree<State, MainState> = {
 
     firebaseConfig.databaseRef.update(updateObject).then(() => {
       commit('userModule/setUser', userDetails.userOptions, { root: true });
-      // set user details in 'categories'
-      // commit('setCategoriesUser', data);
+      // commit('categoriesModule/setCategory', userDetails.userOptions);
     });
   },
 };
