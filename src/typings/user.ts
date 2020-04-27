@@ -11,4 +11,5 @@ export const enum userMutations {
 export const enum userActions {
   CreateUserProfile = 'createUserProfile',
   SetCurrentUser = 'setCurrentUser',
+  UpdateUserProfile = 'updateUserProfile',
 }

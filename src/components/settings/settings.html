@@ -1,0 +1,32 @@
+<div class="settings">
+  Settings
+  <div>Update your profile details</div>
+  <!-- Categories -->
+  <!-- <div
+      class="block"
+      v-for="(category, index) in categories"
+      @change="updateUserCategories(index)"
+    >
+      <b-checkbox v-model="user.categories" :native-value="index">
+        {{category.type}}
+      </b-checkbox>
+    </div> -->
+
+  <!-- Other details -->
+  <b-field label="Name">
+    <b-input type="text" v-model="user.name" placeholder="Name"> </b-input>
+  </b-field>
+  <b-field label="Username">
+    <b-input type="text" v-model="user.username" placeholder="Username">
+    </b-input>
+  </b-field>
+  <b-field label="Gender">
+    <b-input type="text" v-model="user.gender" placeholder="Gender"> </b-input>
+  </b-field>
+  <b-field label="Location">
+    <b-input type="text" v-model="user.location" placeholder="Location">
+    </b-input>
+  </b-field>
+
+  <button @click="updateProfile(user)">Update profile</button>
+</div>

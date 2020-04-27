@@ -55,6 +55,14 @@ const actions: ActionTree<State, MainState> = {
       }
     });
   },
+
+  updateUserProfile({ state, commit }: ActionContext<State, MainState>, user) {
+    const updateObject: any = {};
+    updateObject[`users/${user.id}`] = user.data;
+    firebase.databaseRef.update(updateObject).then(() => {
+      commit('setUser', user.data);
+    });
+  },
 };
 
 export const userModule = {

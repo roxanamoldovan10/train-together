@@ -30,6 +30,17 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: () =>
+      import(
+        /* webpackChunkName: "login" */ '@/components/settings/settings.vue'
+      ),
+    meta: {
+      requiresAuth: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
