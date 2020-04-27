@@ -1,7 +1,3 @@
-export const enum CommonGetters {
-  CurrentUser = 'getCurrentUser',
-}
-
-export const enum CommonMutations {
-  CurrentUser = 'setCurrentUser',
+export const enum CommonActions {
+  UpdateBulkUserCategories = 'updateBulkUserCategories',
 }

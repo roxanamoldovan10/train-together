@@ -2,7 +2,10 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import authService from '@/services/auth-service';
 import firebaseConfig from '@/services/firebase-config';
-import usersService from '@/services/users-service';
+import { namespace } from 'vuex-class';
+import { UserActions } from '../../typings/user-state';
+
+const userModule = namespace('userModule');
 
 @Component({
   template: './sign-up.html',
@@ -14,6 +17,9 @@ export default class SignIn extends Vue {
   public username = '';
   public gender = '';
   public location = '';
+
+  @userModule.Action(UserActions.CreateUserProfile)
+  public createUserProfile!: (payload: object) => Promise<UserObject>;
 
   signUp() {
     firebaseConfig.auth
@@ -29,12 +35,12 @@ export default class SignIn extends Vue {
 
   createProfile(result: any) {
     const userDetails = {
+      uid: result.user.uid,
       name: this.name,
       username: this.username,
       gender: this.gender,
       location: this.location,
     };
-    const usersServiceInstance = new usersService();
-    return usersServiceInstance.createUserProfile(result.user.uid, userDetails);
+    return this.createUserProfile(userDetails);
   }
 }

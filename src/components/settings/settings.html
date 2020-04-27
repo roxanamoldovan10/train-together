@@ -1,14 +1,13 @@
 <div class="settings">
   Settings
   <div>Update your profile details</div>
-
   <!-- Categories -->
   <div
     class="block"
     v-for="(category, index) in categories"
     @change="updateUserCategories(index)"
   >
-    <b-checkbox v-model="selectedOptions" :native-value="index">
+    <b-checkbox v-model="user.categories" :native-value="index">
       {{category.type}}
     </b-checkbox>
   </div>

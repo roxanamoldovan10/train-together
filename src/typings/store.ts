@@ -8,4 +8,5 @@ export interface RootState {
 
 export interface MainState {
   generalId?: string;
+  user?: UserObject;
 }
