@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import firebase from 'firebase';
+import firebase from '@/services/firebase-config';
 import Dashboard from '@/components/dashboard/dashboard.vue';
 import SignUp from '@/components/sign-up/sign-up.vue';
 import Login from '@/components/login/login.vue';
@@ -38,7 +38,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser;
+  const currentUser = firebase.auth.currentUser;
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
   if (requiresAuth && !currentUser) next('sign-in');

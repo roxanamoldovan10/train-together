@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { MutationTree, GetterTree } from 'vuex';
 import { commonModule } from './modules/common';
+import { authModule } from './modules/auth';
 import createPersistedState from 'vuex-persistedstate';
 import { MainState, RootState } from '../typings/store';
 
@@ -18,6 +19,7 @@ export default new Vuex.Store<MainState>({
   mutations,
   modules: {
     commonModule,
+    authModule,
   },
   plugins: [createPersistedState()],
 });

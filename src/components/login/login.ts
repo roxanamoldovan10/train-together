@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import authService from '@/services/auth-service';
+import { namespace } from 'vuex-class';
+import { authActions, authGetters } from '../../typings/auth';
+
+const authModule = namespace('authModule');
 
 @Component({
   template: './sign-in.html',
@@ -11,9 +14,20 @@ export default class SignIn extends Vue {
   public email = '';
   public password = '';
 
-  login() {
-    authService(this.email, this.password).then((result) => {
-      this.$router.push({ path: 'dashboard' });
+  @authModule.Getter(authGetters.GetUserAuthState)
+  public getUserAuthState!: boolean;
+
+  @authModule.Action(authActions.AuthentificateUser)
+  public authentificateUser!: (payload: object) => Promise<UserObject>;
+
+  async login() {
+    const options = { email: this.email, password: this.password };
+    await this.authentificateUser(options).then(() => {
+      try {
+        this.$router.push({ path: 'dashboard' });
+      } catch {
+        throw Error('Could not fetch data');
+      }
     });
   }
 }
