@@ -21,7 +21,7 @@ export default class SignIn extends Vue {
       .then((result) => {
         this.createProfile(result).then(() => {
           authService(this.email, this.password).then(() => {
-            this.$router.push({ path: 'settings' });
+            // this.$router.push({ path: 'settings' });
           });
         });
       });

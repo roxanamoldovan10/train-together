@@ -4,9 +4,6 @@
       <router-link to="/dashboard" class="navbar-item">
         <font-awesome-icon icon="home"></font-awesome-icon
       ></router-link>
-      <router-link to="/settings" class="navbar-item">
-        <font-awesome-icon icon="cog"></font-awesome-icon>
-      </router-link>
     </div>
     <div class="column main-section">
       <div class="columns">
