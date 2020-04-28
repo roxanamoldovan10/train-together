@@ -2,7 +2,7 @@ import { GetterTree, MutationTree, ActionTree, ActionContext } from 'vuex';
 import { MainState } from '@/typings/store';
 import firebase from '@/config/firebase-config';
 export class State {
-  public categories: CategoryObject = {} as CategoryObject;
+  public categories: CategoryObject[] = [];
 }
 
 //eslint-disable-next-line
@@ -13,8 +13,15 @@ const getters: GetterTree<State, any> = {
 };
 
 const mutations: MutationTree<State> = {
-  setCategories: (state: State, payload: CategoryObject) =>
+  setCategories: (state: State, payload: CategoryObject[]) =>
     (state.categories = payload),
+  setCategoryUser: (state: State, payload) => {
+    Object.keys(payload.userCategories).forEach((key: string) => {
+      const categoryId = payload.userCategories[key];
+      state.categories[categoryId].users[payload.userUid] =
+        payload.categoryUserOptions;
+    });
+  },
 };
 
 const actions: ActionTree<State, MainState> = {

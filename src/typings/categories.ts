@@ -4,6 +4,7 @@ export const enum CategoriesGetters {
 
 export const enum CategoriesMutations {
   SetCategories = 'setCategories',
+  SetCategoryUser = 'setCategoryUser',
 }
 
 export const enum CategoriesActions {

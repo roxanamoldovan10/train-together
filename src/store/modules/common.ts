@@ -4,9 +4,8 @@ import firebaseConfig from '@/config/firebase-config';
 
 import { namespace } from 'vuex-class';
 const userModule = namespace('userModule');
-export class State {
-  public userId = '';
-}
+const categoriesModule = namespace('categoriesModule');
+export class State {}
 
 const actions: ActionTree<State, MainState> = {
   updateBulkUserCategories: (
@@ -23,7 +22,7 @@ const actions: ActionTree<State, MainState> = {
 
     firebaseConfig.databaseRef.update(updateObject).then(() => {
       commit('userModule/setUser', userDetails.userOptions, { root: true });
-      // commit('categoriesModule/setCategory', userDetails.userOptions);
+      commit('categoriesModule/setCategoryUser', userDetails, { root: true });
     });
   },
 };

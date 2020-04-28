@@ -3,9 +3,11 @@ import { Component } from 'vue-property-decorator';
 import { namespace } from 'vuex-class';
 import { userGetters, userActions } from '../../typings/user';
 import { CommonActions } from '../../typings/common';
+import { CategoriesActions, CategoriesGetters } from '../../typings/categories';
 
 const userModule = namespace('userModule');
 const commonModule = namespace('commonModule');
+const categoriesModule = namespace('categoriesModule');
 
 @Component({
   template: './settings.html',
@@ -34,10 +36,18 @@ export default class Settings extends Vue {
   @commonModule.Action(CommonActions.UpdateBulkUserCategories)
   public updateBulkUserCategories!: (payload: object) => Promise<UserObject>;
 
+  @categoriesModule.Action(CategoriesActions.RetriveCategories)
+  public retriveCategories!: () => Promise<CategoryObject>;
+
+  @categoriesModule.Getter(CategoriesGetters.GetCategories)
+  public getCategories!: CategoryObject[];
+
   // Lifecycle hook
   mounted() {
     this.getUserDetails();
     this.userSelectedCateg = Object.keys(this.user.categories);
+    this.retriveCategories();
+    this.categories = this.getCategories;
   }
 
   /**
