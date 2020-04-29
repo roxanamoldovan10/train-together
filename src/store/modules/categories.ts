@@ -17,7 +17,7 @@ const mutations: MutationTree<State> = {
     (state.categories = payload),
   setCategoryUser: (state: State, payload) => {
     Object.keys(payload.userCategories).forEach((key: string) => {
-      const categoryId = payload.userCategories[key];
+      const categoryId: number = payload.userCategories[key];
       state.categories[categoryId].users[payload.userUid] =
         payload.categoryUserOptions;
     });
@@ -35,6 +35,28 @@ const actions: ActionTree<State, MainState> = {
     } catch {
       throw Error('Could not fetch data');
     }
+  },
+
+  addUserToCategory(
+    { state, commit }: ActionContext<State, MainState>,
+    options,
+  ) {
+    try {
+      firebase.categoriesRef
+        .child(options.categoryId + '/users/' + options.userUid)
+        .set(options.categoryUserOptions);
+    } catch {
+      throw Error('Could not fetch data');
+    }
+  },
+
+  removeUserFromCategory(
+    { state, commit }: ActionContext<State, MainState>,
+    options,
+  ) {
+    firebase.categoriesRef
+      .child(options.categoryId + '/users/' + options.userUid)
+      .remove();
   },
 };
 

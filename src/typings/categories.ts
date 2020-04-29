@@ -9,4 +9,6 @@ export const enum CategoriesMutations {
 
 export const enum CategoriesActions {
   RetriveCategories = 'retriveCategories',
+  AddUserToCategory = 'addUserToCategory',
+  RemoveUserFromCategory = 'removeUserFromCategory',
 }

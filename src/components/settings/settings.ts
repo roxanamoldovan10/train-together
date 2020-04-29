@@ -18,12 +18,12 @@ export default class Settings extends Vue {
   public categories: CategoryObject[] = [];
   public userId = '';
   public user = {} as UserObject;
-  public userSelectedCateg = {};
   public categoryUserOptions!: UserProfileObject;
 
   public selectedOptions: {}[] = [];
   public updateObject?: any;
 
+  // User store
   @userModule.Getter(userGetters.GetUser)
   public getUser!: UserObject;
 
@@ -33,11 +33,27 @@ export default class Settings extends Vue {
   @userModule.Action(userActions.UpdateUserProfile)
   public updateUserProfile!: (payload: object) => Promise<UserObject>;
 
+  @userModule.Action(userActions.AddCategoryToUser)
+  public addCategoryToUser!: (payload: object) => Promise<UserObject>;
+
+  @userModule.Action(userActions.RemoveCategoryFromUser)
+  public removeCategoryFromUser!: (payload: object) => Promise<UserObject>;
+
+  // Common store
   @commonModule.Action(CommonActions.UpdateBulkUserCategories)
   public updateBulkUserCategories!: (payload: object) => Promise<UserObject>;
 
+  // Categories store
   @categoriesModule.Action(CategoriesActions.RetriveCategories)
-  public retriveCategories!: () => Promise<CategoryObject>;
+  public retriveCategories!: () => Promise<CategoryObject[]>;
+
+  @categoriesModule.Action(CategoriesActions.AddUserToCategory)
+  public addUserToCategory!: (payload: object) => Promise<CategoryObject[]>;
+
+  @categoriesModule.Action(CategoriesActions.RemoveUserFromCategory)
+  public removeUserFromCategory!: (
+    payload: object,
+  ) => Promise<CategoryObject[]>;
 
   @categoriesModule.Getter(CategoriesGetters.GetCategories)
   public getCategories!: CategoryObject[];
@@ -45,7 +61,6 @@ export default class Settings extends Vue {
   // Lifecycle hook
   mounted() {
     this.getUserDetails();
-    this.userSelectedCateg = Object.keys(this.user.categories);
     this.retriveCategories();
     this.categories = this.getCategories;
   }
@@ -61,7 +76,8 @@ export default class Settings extends Vue {
   getUserDetails() {
     this.user = this.getUser;
     this.userId = this.getUserId;
-    this.user.categories = this.user.categories || [];
+    // this.user.categories = this.user.categories || [];
+    if (this.user.categories) this.getUserSelectedCategories();
 
     // this.categoryUserOptions = {
     //   name: this.user.name,
@@ -95,5 +111,88 @@ export default class Settings extends Vue {
     };
 
     this.updateBulkUserCategories(options);
+  }
+
+  /**
+   * Assign keys for user selected categories
+   */
+  getUserSelectedCategories() {
+    const userCategoriesKeys = Object.keys(this.user.categories);
+    userCategoriesKeys.forEach((categoryKey: string) => {
+      this.selectedOptions.push(this.user.categories[categoryKey]);
+    });
+    console.log('selected: ', this.selectedOptions);
+  }
+
+  /**
+   * Add/Remove user category
+   */
+  updateUserCategories(categoryId: number) {
+    const userInitialCategories: any = [];
+    if (this.user.categories) {
+      Object.keys(this.user.categories).forEach((categoryKey: string) => {
+        userInitialCategories.push(this.user.categories[categoryKey]);
+      });
+    }
+
+    const userHasCategory = userInitialCategories.some(
+      (option: number) => option === categoryId,
+    );
+    if (!this.getUser.categories || !userHasCategory) {
+      return this.addUserCategory(categoryId);
+    }
+    return this.removeUserCategory(categoryId);
+  }
+
+  /**
+   * Add selected category to user
+   * Add user to category
+   * @param categoryId
+   */
+  addUserCategory(categoryId: number) {
+    this.addCategoryToUser({ userUid: this.getUserId, categoryId: categoryId });
+    console.log(this.getUser);
+
+    const categoryUserOptions = {
+      name: this.user.name,
+      username: this.user.username,
+      gender: this.user.gender,
+      location: this.user.location,
+    };
+    this.addUserToCategory({
+      categoryId: categoryId,
+      userUid: this.getUserId,
+      categoryUserOptions: categoryUserOptions,
+    });
+
+    if (categoryId != null) {
+      this.$buefy.toast.open({
+        message: 'Category updated',
+        position: 'is-top-right',
+        type: 'is-success',
+      });
+    }
+  }
+
+  /**
+   * Removes selected category from user
+   * Removes user from category
+   * @param categoryId
+   */
+  removeUserCategory(categoryId: number) {
+    this.removeCategoryFromUser({
+      userUid: this.getUserId,
+      categoryId: categoryId,
+    });
+    this.removeUserFromCategory({
+      categoryId: categoryId,
+      userUid: this.getUserId,
+    });
+
+    this.$buefy.toast.open({
+      message: 'Category removed',
+      position: 'is-top-right',
+      type: 'is-danger',
+    });
   }
 }

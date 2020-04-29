@@ -17,8 +17,17 @@ const getters: GetterTree<State, any> = {
 };
 
 const mutations: MutationTree<State> = {
-  setUser: (state: State, payload: UserObject) => (state.user = payload),
+  setUser: (state: State, payload: UserObject) => {
+    state.user = payload;
+    if (!state.user.categories) state.user.categories = {};
+  },
   setUserId: (state: State, payload: string) => (state.userId = payload),
+  setUserCategory: (state: State, payload: Record<string, any>) => {
+    state.user.categories[payload.key] = payload.data;
+  },
+  removeUserCategory: (state: State, payload: any) => {
+    delete state.user.categories[payload];
+  },
 };
 
 const actions: ActionTree<State, MainState> = {
@@ -62,6 +71,36 @@ const actions: ActionTree<State, MainState> = {
     firebase.databaseRef.update(updateObject).then(() => {
       commit('setUser', user.data);
     });
+  },
+
+  addCategoryToUser: (
+    { state, commit }: ActionContext<State, MainState>,
+    userDetails,
+  ) => {
+    const newChildRef = firebase.usersRef
+      .child(userDetails.userUid + '/categories')
+      .push();
+    newChildRef.set(userDetails.categoryId);
+
+    commit('setUserCategory', {
+      key: newChildRef.key,
+      data: userDetails.categoryId,
+    });
+  },
+
+  removeCategoryFromUser: (
+    { state, commit }: ActionContext<State, MainState>,
+    userDetails,
+  ) => {
+    const userCategoryId = Object.keys(state.user.categories).find(
+      (category: string) =>
+        state.user.categories[category] === userDetails.categoryId,
+    );
+    // const index = state.user.categories.indexOf(userDetails.categoryId);
+    firebase.usersRef
+      .child(userDetails.userUid + '/categories/' + userCategoryId)
+      .remove();
+    commit('removeUserCategory', userCategoryId);
   },
 };
 

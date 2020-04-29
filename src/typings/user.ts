@@ -12,4 +12,6 @@ export const enum userActions {
   CreateUserProfile = 'createUserProfile',
   SetCurrentUser = 'setCurrentUser',
   UpdateUserProfile = 'updateUserProfile',
+  AddCategoryToUser = 'addCategoryToUser',
+  RemoveCategoryFromUser = 'removeCategoryFromUser',
 }
