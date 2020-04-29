@@ -22,6 +22,23 @@ const mutations: MutationTree<State> = {
         payload.categoryUserOptions;
     });
   },
+  setNewUserCategory: (state: State, payload) => {
+    if (state.categories[payload.categoryId].users) {
+      return (state.categories[payload.categoryId].users[payload.userUid] =
+        payload.categoryUserOptions);
+    }
+
+    // NU MERGEEEE
+    state.categories[payload.categoryId].users = [];
+    state.categories[payload.categoryId].users[payload.userUid] =
+      payload.categoryUserOptions;
+
+    const id = payload.userUid;
+    const data = payload.categoryUserOptions;
+
+    // state.categories[payload.categoryId].users[payload.userUid];
+    // state.categories[payload.categoryId] = { users: { id: { data } } };
+  },
 };
 
 const actions: ActionTree<State, MainState> = {
@@ -45,6 +62,12 @@ const actions: ActionTree<State, MainState> = {
       firebase.categoriesRef
         .child(options.categoryId + '/users/' + options.userUid)
         .set(options.categoryUserOptions);
+      const mutationOptions = {
+        categoryId: options.categoryId,
+        userUid: options.userUid,
+        categoryUserOptions: options.categoryUserOptions,
+      };
+      commit('setNewUserCategory', mutationOptions);
     } catch {
       throw Error('Could not fetch data');
     }

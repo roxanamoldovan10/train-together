@@ -8,6 +8,7 @@ const categoriesModule = namespace('categoriesModule');
 export class State {}
 
 const actions: ActionTree<State, MainState> = {
+  // Updates user profile detils
   updateBulkUserCategories: (
     { state, commit }: ActionContext<State, MainState>,
     userDetails,
