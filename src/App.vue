@@ -8,13 +8,8 @@
         <font-awesome-icon icon="cog"></font-awesome-icon
       ></router-link>
     </div>
-    <div class="column main-section">
-      <div class="columns">
-        <div class="column is-2"></div>
-        <div class="column is-8">
-          <router-view />
-        </div>
-      </div>
+    <div style="width:100%">
+      <router-view />
     </div>
   </div>
 </template>
