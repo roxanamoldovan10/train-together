@@ -37,4 +37,14 @@
       }
     }
   }
+  &__card-footer {
+    &__btn {
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 10px;
+      button {
+        margin-bottom: 10px;
+      }
+    }
+  }
 }

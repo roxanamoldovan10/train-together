@@ -61,7 +61,7 @@
             ><router-link to="/login">Go to login</router-link></b-button
           >
 
-          <div>
+          <div class="sign-up__card-footer">
             <b-modal
               :active.sync="isCardModalActive"
               :width="640"
@@ -76,19 +76,22 @@
                   </div>
 
                   <div class="content sign-up__categories">
-                    <div v-for="category in categories">
+                    <div v-for="(category, index) in categories">
                       <b-field class="sign-up__category">
                         <b-checkbox-button
                           class="sign-up__category__button"
                           rounded
                           v-model="selectedCategories"
-                          :native-value="category"
+                          :native-value="index"
                         >
                           {{category.type}}
                         </b-checkbox-button>
                       </b-field>
                     </div>
                   </div>
+                </div>
+                <div class="mb-10 sign-up__card-footer__btn">
+                  <b-button rounded @click="signUp()">Done</b-button>
                 </div>
               </div>
             </b-modal>
