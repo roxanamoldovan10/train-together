@@ -18,6 +18,7 @@ const mutations: MutationTree<State> = {
   setCategoryUser: (state: State, payload) => {
     Object.keys(payload.userCategories).forEach((key: string) => {
       const categoryId: number = payload.userCategories[key];
+
       state.categories[categoryId].users[payload.userUid] =
         payload.categoryUserOptions;
     });

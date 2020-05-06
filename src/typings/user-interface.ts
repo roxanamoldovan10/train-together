@@ -1,5 +1,7 @@
 interface CategoryObject {
-  [index: number]: { description: string; type: string; users: object };
+  description: string;
+  type: string;
+  users: Array<any>;
 }
 
 interface UserProfileObject {
