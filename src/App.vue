@@ -7,6 +7,9 @@
       <router-link to="/settings" class="navbar-item">
         <font-awesome-icon icon="cog"></font-awesome-icon
       ></router-link>
+      <router-link to="/find" class="navbar-item">
+        <font-awesome-icon icon="search"></font-awesome-icon
+      ></router-link>
     </div>
     <div style="width:100%">
       <router-view />

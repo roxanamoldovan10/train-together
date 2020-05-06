@@ -35,7 +35,18 @@ const routes = [
     name: 'Settings',
     component: () =>
       import(
-        /* webpackChunkName: "login" */ '@/components/settings/settings.vue'
+        /* webpackChunkName: "settings" */ '@/components/settings/settings.vue'
+      ),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/find',
+    name: 'Find',
+    component: () =>
+      import(
+        /* webpackChunkName: "find" */ '@/components/find-partner/find-partner.vue'
       ),
     meta: {
       requiresAuth: true,
