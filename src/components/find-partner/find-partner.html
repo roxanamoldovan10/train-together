@@ -1,1 +1,27 @@
-<div>Test</div>
+<section class="find-partner hero">
+  <div class="hero-body">
+    <div class="container find-partner__container">
+      <!-- Categories -->
+      <div class="find-partner__categories">
+        <div v-for="(category, index) in categories">
+          <b-field class="find-partner__category">
+            <b-checkbox-button
+              class=""
+              rounded
+              v-model="selectedOptions"
+              :native-value="category"
+            >
+              {{category.type}}
+            </b-checkbox-button>
+          </b-field>
+        </div>
+      </div>
+      <div v-for="(category, index) in selectedOptions" v-if="category.users">
+        <h1 class="mb-10 mt-20">{{category.type}}</h1>
+        <div v-for="user in category.users">
+          {{user.name}} | {{user.gender}}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
