@@ -1,0 +1,24 @@
+.settings {
+  .mb-10 {
+    margin-bottom: 10px;
+  }
+  .mb-20 {
+    margin-bottom: 20px;
+  }
+  .mt-20 {
+    margin-top: 30px;
+  }
+  &__category {
+    margin-right: 5px;
+    label {
+      border-radius: 20px;
+    }
+  }
+  &__container {
+    width: 60%;
+  }
+
+  &__categories {
+    display: flex;
+  }
+}

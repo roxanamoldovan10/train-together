@@ -5,9 +5,11 @@ import firebaseConfig from '@/config/firebase-config';
 import { namespace } from 'vuex-class';
 import { authActions } from '../../typings/auth';
 import { userActions } from '../../typings/user';
+import { CategoriesGetters } from '../../typings/categories';
 
 const authModule = namespace('authModule');
 const userModule = namespace('userModule');
+const categoriesModule = namespace('categoriesModule');
 
 @Component({
   template: './sign-up.html',
@@ -19,6 +21,9 @@ export default class SignIn extends Vue {
   public username = '';
   public gender = '';
   public location = '';
+  public isCardModalActive = false;
+  public categories: CategoryObject[] = [];
+  public selectedCategories: CategoryObject[] = [];
 
   @authModule.Action(authActions.AuthentificateUser)
   public authentificateUser!: (payload: object) => Promise<UserObject>;
@@ -26,6 +31,12 @@ export default class SignIn extends Vue {
   @userModule.Action(userActions.CreateUserProfile)
   public createUserProfile!: (payload: object) => Promise<UserObject>;
 
+  @categoriesModule.Getter(CategoriesGetters.GetCategories)
+  public getCategories!: CategoryObject[];
+
+  mounted() {
+    this.categories = this.getCategories;
+  }
   signUp() {
     firebaseConfig.auth
       .createUserWithEmailAndPassword(this.email, this.password)

@@ -1,7 +1,5 @@
 interface CategoryObject {
-  description: string;
-  type: string;
-  users: object;
+  [index: number]: { description: string; type: string; users: object };
 }
 
 interface UserProfileObject {
@@ -12,5 +10,5 @@ interface UserProfileObject {
 }
 
 interface UserObject extends UserProfileObject {
-  categories: { [key: string]: string };
+  categories: { [key: string]: number };
 }

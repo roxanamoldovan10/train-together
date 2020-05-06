@@ -1,8 +1,8 @@
-<section class="sign-up">
-  <div class="columns is-vcentered sign-up__content">
+<section class="login">
+  <div class="columns is-vcentered login__content">
     <div class="column is-half">
-      <div class="sign-up__form">
-        <div class="sign-up__fields">
+      <div class="login__form">
+        <div class="login__fields">
           <div>Login</div>
           <b-field label="Email">
             <b-input type="email" v-model="email" placeholder="Email" rounded>
@@ -18,15 +18,15 @@
             >
             </b-input>
           </b-field>
-          <div class="sign-up__buttons">
+          <div class="login__buttons">
+            <b-button @click="login" rounded>Login</b-button>
             <b-button rounded
               ><router-link to="/sign-up">Sign Up</router-link>
             </b-button>
-            <b-button @click="login" rounded>Login</b-button>
           </div>
         </div>
       </div>
     </div>
-    <div class="column is-half sign-up__right"></div>
+    <div class="column is-half login__right"></div>
   </div>
 </section>

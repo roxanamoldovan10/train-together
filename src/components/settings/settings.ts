@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import _ from 'lodash';
 import { Component } from 'vue-property-decorator';
 import { namespace } from 'vuex-class';
 import { userGetters, userActions } from '../../typings/user';
@@ -16,12 +17,13 @@ const categoriesModule = namespace('categoriesModule');
 export default class Settings extends Vue {
   // Data property
   public categories: CategoryObject[] = [];
-  public userId = '';
-  public user = {} as UserObject;
   public categoryUserOptions!: UserProfileObject;
-
-  public selectedOptions: {}[] = [];
+  public selectedOptions: Array<number> = [];
+  public initialSelectedOptions: Array<number> = [];
   public updateObject?: any;
+  public user = {} as UserObject;
+  public userId = '';
+  public labelPosition = 'on-border';
 
   // User store
   @userModule.Getter(userGetters.GetUser)
@@ -66,34 +68,47 @@ export default class Settings extends Vue {
   }
 
   /**
-   * Request for list of categories
-   */
-  //   getCategoriesList() {}
-
-  /**
    * Request for current user deatils
    */
   getUserDetails() {
     this.user = this.getUser;
     this.userId = this.getUserId;
-    // this.user.categories = this.user.categories || [];
     if (this.user.categories) this.getUserSelectedCategories();
-
-    // this.categoryUserOptions = {
-    //   name: this.user.name,
-    //   username: this.user.username,
-    //   gender: this.user.gender,
-    //   location: this.user.location,
-    // };
   }
 
   /**
    * Updates user profile
    * @returns {Promise}
    */
-  updateProfile({ username, name, gender, location }: any) {
+  async updateProfile({ username, name, gender, location }: any) {
     if (!this.user.categories) {
       return this.updateUserProfile({ data: this.user, id: this.getUserId });
+    }
+
+    // Checks is user selected more categories
+    const selectedCategories = this.selectedOptions.filter((obj) => {
+      return this.initialSelectedOptions.indexOf(obj) == -1;
+    });
+
+    // Checks is user deselected some categories
+    const deselectedCategories = this.initialSelectedOptions.filter((obj) => {
+      return this.selectedOptions.indexOf(obj) == -1;
+    });
+
+    this.initialSelectedOptions = this.selectedOptions;
+
+    // Add categories to user
+    if (selectedCategories) {
+      await selectedCategories.forEach((selected: number) => {
+        this.addUserCategory(selected);
+      });
+    }
+
+    // Remove categories from user
+    if (deselectedCategories) {
+      await deselectedCategories.forEach((selected: number) => {
+        this.removeUserCategory(selected);
+      });
     }
 
     const categoryUserOptions = {
@@ -110,7 +125,7 @@ export default class Settings extends Vue {
       userUid: this.getUserId,
     };
 
-    this.updateBulkUserCategories(options);
+    await this.updateBulkUserCategories(options);
   }
 
   /**
@@ -121,7 +136,7 @@ export default class Settings extends Vue {
     userCategoriesKeys.forEach((categoryKey: string) => {
       this.selectedOptions.push(this.user.categories[categoryKey]);
     });
-    console.log('selected: ', this.selectedOptions);
+    this.initialSelectedOptions = _.cloneDeep(this.selectedOptions);
   }
 
   /**

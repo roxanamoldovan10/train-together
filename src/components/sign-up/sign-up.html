@@ -1,43 +1,101 @@
 <section class="sign-up">
-  <div>
-    <div>Create profile</div>
-    <b-field label="Email">
-      <b-input type="email" v-model="email" placeholder="Email"> </b-input>
-    </b-field>
-    <b-field label="Password">
-      <b-input
-        type="password"
-        v-model="password"
-        placeholder="Password"
-        password-reveal
-      >
-      </b-input>
-    </b-field>
+  <div class="columns is-vcentered sign-up__content">
+    <div class="column is-half">
+      <div class="sign-up__form">
+        <div class="sign-up__fields">
+          <div>Create profile</div>
+          <b-field label="Email">
+            <b-input type="email" v-model="email" placeholder="Email" rounded>
+            </b-input>
+          </b-field>
+          <b-field label="Password">
+            <b-input
+              type="password"
+              v-model="password"
+              placeholder="Password"
+              password-reveal
+              rounded
+            >
+            </b-input>
+          </b-field>
 
-    <!-- Profile details -->
-    <p>Profile details</p>
-    <div>
-      <b-field label="Name">
-        <b-input type="text" v-model="name" placeholder="Name"> </b-input>
-      </b-field>
-      <b-field label="Username">
-        <b-input type="text" v-model="username" placeholder="Username">
-        </b-input>
-      </b-field>
-      <b-field label="Gender">
-        <b-input type="text" v-model="gender" placeholder="Gender"> </b-input>
-      </b-field>
-      <b-field label="Location">
-        <b-input type="text" v-model="location" placeholder="Location">
-        </b-input>
-      </b-field>
-      <!-- Add 'choose category' -->
+          <!-- Profile details -->
+          <p>Profile details</p>
+          <div>
+            <b-field label="Name">
+              <b-input type="text" v-model="name" placeholder="Name" rounded>
+              </b-input>
+            </b-field>
+            <b-field label="Username">
+              <b-input
+                type="text"
+                v-model="username"
+                placeholder="Username"
+                rounded
+              >
+              </b-input>
+            </b-field>
+            <b-field label="Gender">
+              <b-input
+                type="text"
+                v-model="gender"
+                placeholder="Gender"
+                rounded
+              >
+              </b-input>
+            </b-field>
+            <b-field label="Location">
+              <b-input
+                type="text"
+                v-model="location"
+                placeholder="Location"
+                rounded
+              >
+              </b-input>
+            </b-field>
+            <!-- Add 'choose category' -->
+          </div>
+
+          <b-button @click="isCardModalActive = true" rounded>Sign Up</b-button>
+          <b-button rounded
+            ><router-link to="/login">Go to login</router-link></b-button
+          >
+
+          <div>
+            <b-modal
+              :active.sync="isCardModalActive"
+              :width="640"
+              scroll="keep"
+            >
+              <div class="card">
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-content">
+                      <p class="title is-4">Complete your profile</p>
+                    </div>
+                  </div>
+
+                  <div class="content sign-up__categories">
+                    <div v-for="category in categories">
+                      <b-field class="sign-up__category">
+                        <b-checkbox-button
+                          class="sign-up__category__button"
+                          rounded
+                          v-model="selectedCategories"
+                          :native-value="category"
+                        >
+                          {{category.type}}
+                        </b-checkbox-button>
+                      </b-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </b-modal>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <button @click="signUp">Sign Up</button>
-    <p>
-      Go back to
-      <router-link to="/login">login</router-link>
-    </p>
+    <div class="column is-half sign-up__right"></div>
   </div>
 </section>

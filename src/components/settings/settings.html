@@ -1,32 +1,62 @@
-<div class="settings hero-body">
-  Settings
-  <div>Update your profile details</div>
-  <!-- Categories -->
-  <div
-    class="block"
-    v-for="(category, index) in categories"
-    @change="updateUserCategories(index)"
-  >
-    <b-checkbox v-model="selectedOptions" :native-value="index">
-      {{category.type}}
-    </b-checkbox>
+<section class="settings hero">
+  <div class="hero-body">
+    <div class="container settings__container">
+      <h2 class="subtitle">
+        Settings
+      </h2>
+      <div class="mb-10">
+        <font-awesome-icon icon="tag"></font-awesome-icon>
+        Categories
+      </div>
+      <!-- Categories -->
+      <div class="settings__categories">
+        <div v-for="(category, index) in categories">
+          <b-field class="settings__category">
+            <b-checkbox-button
+              class=""
+              rounded
+              v-model="selectedOptions"
+              :native-value="index"
+            >
+              {{category.type}}
+            </b-checkbox-button>
+          </b-field>
+        </div>
+      </div>
+
+      <!-- Other details -->
+      <div class="mb-20 mt-20">
+        <font-awesome-icon icon="sliders-h"></font-awesome-icon>
+        General
+      </div>
+      <b-field class="mb-20" label="Name" :label-position="labelPosition">
+        <b-input type="text" v-model="user.name" placeholder="Name" rounded>
+        </b-input>
+      </b-field>
+      <b-field class="mb-20" label="Username" :label-position="labelPosition">
+        <b-input
+          type="text"
+          v-model="user.username"
+          placeholder="Username"
+          rounded
+        >
+        </b-input>
+      </b-field>
+      <b-field class="mb-20" label="Gender" :label-position="labelPosition">
+        <b-input type="text" v-model="user.gender" placeholder="Gender" rounded>
+        </b-input>
+      </b-field>
+      <b-field class="mb-20" label="Location" :label-position="labelPosition">
+        <b-input
+          type="text"
+          v-model="user.location"
+          placeholder="Location"
+          rounded
+        >
+        </b-input>
+      </b-field>
+
+      <b-button @click="updateProfile(user)" rounded>Update profile</b-button>
+    </div>
   </div>
-
-  <!-- Other details -->
-  <b-field label="Name">
-    <b-input type="text" v-model="user.name" placeholder="Name"> </b-input>
-  </b-field>
-  <b-field label="Username">
-    <b-input type="text" v-model="user.username" placeholder="Username">
-    </b-input>
-  </b-field>
-  <b-field label="Gender">
-    <b-input type="text" v-model="user.gender" placeholder="Gender"> </b-input>
-  </b-field>
-  <b-field label="Location">
-    <b-input type="text" v-model="user.location" placeholder="Location">
-    </b-input>
-  </b-field>
-
-  <button @click="updateProfile(user)">Update profile</button>
-</div>
+</section>
