@@ -14,6 +14,9 @@ const getters: GetterTree<State, any> = {
   getUserId(state: State) {
     return state.userId;
   },
+  getUserFriendList(state: State) {
+    return state.user.friendList;
+  },
 };
 
 const mutations: MutationTree<State> = {
@@ -24,6 +27,10 @@ const mutations: MutationTree<State> = {
   setUserId: (state: State, payload: string) => (state.userId = payload),
   setUserCategory: (state: State, payload: Record<string, any>) => {
     state.user.categories[payload.key] = payload.data;
+  },
+  setUserFriendList: (state: State, payload: Record<string, any>) => {
+    state.user.friendList = state.user.friendList || [];
+    state.user.friendList[payload.id] = payload.status;
   },
   removeUserCategory: (state: State, payload: any) => {
     delete state.user.categories[payload];
@@ -101,6 +108,24 @@ const actions: ActionTree<State, MainState> = {
       .child(userDetails.userUid + '/categories/' + userCategoryId)
       .remove();
     commit('removeUserCategory', userCategoryId);
+  },
+
+  // Friend request
+  addConnection: (
+    { state, commit }: ActionContext<State, MainState>,
+    index,
+  ) => {
+    firebase.usersRef
+      .child(state.userId + '/friendList/' + index)
+      .set('pending');
+    firebase.usersRef
+      .child(index + '/friendList/' + state.userId)
+      .set('review');
+
+    commit('setUserFriendList', {
+      id: index,
+      status: 'pending',
+    });
   },
 };
 

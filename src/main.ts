@@ -14,10 +14,11 @@ import {
   faTag,
   faSlidersH,
   faSearch,
+  faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faCog, faHome, faTag, faSlidersH, faSearch);
+library.add(faCog, faHome, faTag, faSlidersH, faSearch, faUserPlus);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(Buefy);
