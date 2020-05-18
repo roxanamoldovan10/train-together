@@ -127,6 +127,24 @@ const actions: ActionTree<State, MainState> = {
       status: 'pending',
     });
   },
+
+  // Accept Friend request
+  acceptConnection: (
+    { state, commit }: ActionContext<State, MainState>,
+    index,
+  ) => {
+    firebase.usersRef
+      .child(state.userId + '/friendList/' + index)
+      .set('accepted');
+    firebase.usersRef
+      .child(index + '/friendList/' + state.userId)
+      .set('accepted');
+
+    commit('setUserFriendList', {
+      id: index,
+      status: 'accepted',
+    });
+  },
 };
 
 export const userModule = {

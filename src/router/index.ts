@@ -52,6 +52,17 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: '/connections',
+    name: 'Connections',
+    component: () =>
+      import(
+        /* webpackChunkName: "connections" */ '@/components/connections/connections.vue'
+      ),
+    meta: {
+      requiresAuth: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
