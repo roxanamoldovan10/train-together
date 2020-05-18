@@ -1,0 +1,15 @@
+.find-partner {
+  &__category {
+    margin-right: 5px;
+    label {
+      border-radius: 20px;
+    }
+  }
+  &__container {
+    width: 60%;
+  }
+
+  &__categories {
+    display: flex;
+  }
+}

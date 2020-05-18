@@ -1,22 +1,32 @@
-<section class="sign-up">
-  <div>
-    <div>Login</div>
-    <b-field label="Email">
-      <b-input type="email" v-model="email" placeholder="Email"> </b-input>
-    </b-field>
-    <b-field label="Password">
-      <b-input
-        type="password"
-        v-model="password"
-        placeholder="Password"
-        password-reveal
-      >
-      </b-input>
-    </b-field>
-    <button @click="login">Login</button>
-    <p>
-      Don't have an account?
-      <router-link to="/sign-up">Sign Up</router-link>
-    </p>
+<section class="login">
+  <div class="columns is-vcentered login__content">
+    <div class="column is-half">
+      <div class="login__form">
+        <div class="login__fields">
+          <div>Login</div>
+          <b-field label="Email">
+            <b-input type="email" v-model="email" placeholder="Email" rounded>
+            </b-input>
+          </b-field>
+          <b-field label="Password">
+            <b-input
+              type="password"
+              v-model="password"
+              placeholder="Password"
+              password-reveal
+              rounded
+            >
+            </b-input>
+          </b-field>
+          <div class="login__buttons">
+            <b-button @click="login" rounded>Login</b-button>
+            <b-button rounded
+              ><router-link to="/sign-up">Sign Up</router-link>
+            </b-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column is-half login__right"></div>
   </div>
 </section>

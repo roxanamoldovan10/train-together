@@ -1,4 +1,4 @@
-.sign-up {
+.login {
   display: flex;
   height: 100%;
   &__content {
@@ -25,26 +25,5 @@
     height: 100%;
     width: 100%;
     background-color: #0000001c;
-  }
-  &__categories {
-    display: flex;
-  }
-  &__category {
-    margin-right: 10px;
-    &__button {
-      label {
-        border-radius: 20px;
-      }
-    }
-  }
-  &__card-footer {
-    &__btn {
-      display: flex;
-      justify-content: flex-end;
-      margin-right: 10px;
-      button {
-        margin-bottom: 10px;
-      }
-    }
   }
 }

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import firebaseConfig from '@/services/firebase-config';
+import firebaseConfig from '@/config/firebase-config';
 import router from './router';
 import store from './store';
 import Buefy from 'buefy';
@@ -8,10 +8,28 @@ import 'buefy/dist/buefy.css';
 import '@/scss/main.scss';
 import _ from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faHome } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCog,
+  faHome,
+  faTag,
+  faSlidersH,
+  faSearch,
+  faUserPlus,
+  faComments,
+  faUserFriends,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faCog, faHome);
+library.add(
+  faCog,
+  faHome,
+  faTag,
+  faSlidersH,
+  faSearch,
+  faUserPlus,
+  faComments,
+  faUserFriends,
+);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(Buefy);

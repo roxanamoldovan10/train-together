@@ -1,9 +1,14 @@
 import Vue from 'vue';
+import _ from 'lodash';
 import { Component } from 'vue-property-decorator';
-import categoriesService from '@/services/categories-service';
-import usersService from '@/services/users-service';
-import firebaseConfig from '@/services/firebase-config';
-import CategoriesService from '@/services/categories-service';
+import { namespace } from 'vuex-class';
+import { userGetters, userActions } from '../../typings/user';
+import { CommonActions } from '../../typings/common';
+import { CategoriesActions, CategoriesGetters } from '../../typings/categories';
+
+const userModule = namespace('userModule');
+const commonModule = namespace('commonModule');
+const categoriesModule = namespace('categoriesModule');
 
 @Component({
   template: './settings.html',
@@ -11,114 +16,144 @@ import CategoriesService from '@/services/categories-service';
 })
 export default class Settings extends Vue {
   // Data property
-  private categoriesService?: any;
-  private usersService?: any;
   public categories: CategoryObject[] = [];
-  public userUid = '';
-  public user = {} as UserObject;
   public categoryUserOptions!: UserProfileObject;
-
-  public selectedOptions: {}[] = [];
+  public selectedOptions: Array<number> = [];
+  public initialSelectedOptions: Array<number> = [];
   public updateObject?: any;
+  public user = {} as UserObject;
+  public userId = '';
+  public labelPosition = 'on-border';
+
+  // User store
+  @userModule.Getter(userGetters.GetUser)
+  public getUser!: UserObject;
+
+  @userModule.Getter(userGetters.GetUserId)
+  public getUserId!: string;
+
+  @userModule.Action(userActions.UpdateUserProfile)
+  public updateUserProfile!: (payload: object) => Promise<UserObject>;
+
+  @userModule.Action(userActions.AddCategoryToUser)
+  public addCategoryToUser!: (payload: object) => Promise<UserObject>;
+
+  @userModule.Action(userActions.RemoveCategoryFromUser)
+  public removeCategoryFromUser!: (payload: object) => Promise<UserObject>;
+
+  // Common store
+  @commonModule.Action(CommonActions.UpdateBulkUserCategories)
+  public updateBulkUserCategories!: (payload: object) => Promise<UserObject>;
+
+  // Categories store
+  @categoriesModule.Action(CategoriesActions.RetriveCategories)
+  public retriveCategories!: () => Promise<CategoryObject[]>;
+
+  @categoriesModule.Action(CategoriesActions.AddUserToCategory)
+  public addUserToCategory!: (payload: object) => Promise<CategoryObject[]>;
+
+  @categoriesModule.Action(CategoriesActions.RemoveUserFromCategory)
+  public removeUserFromCategory!: (
+    payload: object,
+  ) => Promise<CategoryObject[]>;
+
+  @categoriesModule.Getter(CategoriesGetters.GetCategories)
+  public getCategories!: CategoryObject[];
 
   // Lifecycle hook
   mounted() {
-    this.categoriesService = new CategoriesService();
-    this.usersService = new usersService();
-    this.getCategoriesList();
     this.getUserDetails();
-  }
-
-  /**
-   * Request for list of categories
-   */
-  getCategoriesList() {
-    new categoriesService().getAvailableCategories().then((result) => {
-      this.categories = result;
-    });
+    this.retriveCategories();
+    this.categories = this.getCategories;
   }
 
   /**
    * Request for current user deatils
    */
   getUserDetails() {
-    const user = firebaseConfig.auth.currentUser;
-    if (user) {
-      this.userUid = user.uid;
-      this.usersService
-        .getCurrentUser(this.userUid)
-        .then((result: UserObject) => {
-          if (result) {
-            this.user = result;
-            this.categoryUserOptions = {
-              name: this.user.name,
-              username: this.user.username,
-              gender: this.user.gender,
-              location: this.user.location,
-            };
-            if (this.user.categories) {
-              this.getUserSelectedCategories();
-            }
-          }
-        });
-    }
-  }
-
-  /**
-   * Assign keys for user selected categories
-   */
-  getUserSelectedCategories() {
-    const userCategoriesKeys = Object.keys(this.user.categories).map(Number);
-    userCategoriesKeys.forEach((categoryKey: number) => {
-      this.selectedOptions.push(categoryKey);
-    });
+    this.user = this.getUser;
+    this.userId = this.getUserId;
+    if (this.user.categories) this.getUserSelectedCategories();
   }
 
   /**
    * Updates user profile
    * @returns {Promise}
    */
-  updateProfile({ username, name, gender, location }: any) {
-    this.user.categories = this.user.categories || [];
+  async updateProfile({ username, name, gender, location }: any) {
+    if (!this.user.categories) {
+      return this.updateUserProfile({ data: this.user, id: this.getUserId });
+    }
 
-    this.categoryUserOptions = {
+    // Checks is user selected more categories
+    const selectedCategories = this.selectedOptions.filter((obj) => {
+      return this.initialSelectedOptions.indexOf(obj) == -1;
+    });
+
+    // Checks is user deselected some categories
+    const deselectedCategories = this.initialSelectedOptions.filter((obj) => {
+      return this.selectedOptions.indexOf(obj) == -1;
+    });
+
+    this.initialSelectedOptions = this.selectedOptions;
+
+    // Add categories to user
+    if (selectedCategories) {
+      await selectedCategories.forEach((selected: number) => {
+        this.addUserCategory(selected);
+      });
+    }
+
+    // Remove categories from user
+    if (deselectedCategories) {
+      await deselectedCategories.forEach((selected: number) => {
+        this.removeUserCategory(selected);
+      });
+    }
+
+    const categoryUserOptions = {
       name: this.user.name,
       username: this.user.username,
       gender: this.user.gender,
       location: this.user.location,
     };
 
-    const userOptions = {
-      name: name,
-      username: username,
-      gender: gender,
-      location: location,
-      categories: this.user.categories,
+    const options = {
+      userCategories: this.user.categories,
+      categoryUserOptions: categoryUserOptions,
+      userOptions: this.user,
+      userUid: this.getUserId,
     };
 
-    // Bulk update user and categories db objects
-    if (this.user.categories) {
-      const userCategories = Object.keys(this.user.categories);
-      this.usersService.updateBulkUserCategories(
-        userCategories,
-        this.userUid,
-        this.categoryUserOptions,
-        userOptions,
-      );
-    }
+    await this.updateBulkUserCategories(options);
+  }
+
+  /**
+   * Assign keys for user selected categories
+   */
+  getUserSelectedCategories() {
+    const userCategoriesKeys = Object.keys(this.user.categories);
+    userCategoriesKeys.forEach((categoryKey: string) => {
+      this.selectedOptions.push(this.user.categories[categoryKey]);
+    });
+    this.initialSelectedOptions = _.cloneDeep(this.selectedOptions);
   }
 
   /**
    * Add/Remove user category
    */
-  updateUserCategories(index: string) {
-    const categoryId = parseInt(index);
-    const isSelected = this.selectedOptions.some((selected) => {
-      if (typeof selected === 'string') selected = parseInt(selected);
-      return selected === categoryId;
-    });
+  updateUserCategories(categoryId: number) {
+    const userInitialCategories: any = [];
+    if (this.user.categories) {
+      Object.keys(this.user.categories).forEach((categoryKey: string) => {
+        userInitialCategories.push(this.user.categories[categoryKey]);
+      });
+    }
 
-    if (isSelected) {
+    const userHasCategory = userInitialCategories.some(
+      (option: number) => option === categoryId,
+    );
+    if (!this.getUser.categories || !userHasCategory) {
       return this.addUserCategory(categoryId);
     }
     return this.removeUserCategory(categoryId);
@@ -130,14 +165,22 @@ export default class Settings extends Vue {
    * @param categoryId
    */
   addUserCategory(categoryId: number) {
-    this.usersService.addCategoryToUser(this.userUid, categoryId);
-    this.categoriesService.addUserToCategory(
-      categoryId,
-      this.userUid,
-      this.categoryUserOptions,
-    );
+    this.addCategoryToUser({ userUid: this.getUserId, categoryId: categoryId });
+    console.log(this.getUser);
+
+    const categoryUserOptions = {
+      name: this.user.name,
+      username: this.user.username,
+      gender: this.user.gender,
+      location: this.user.location,
+    };
+    this.addUserToCategory({
+      categoryId: categoryId,
+      userUid: this.getUserId,
+      categoryUserOptions: categoryUserOptions,
+    });
+
     if (categoryId != null) {
-      this.user.categories[categoryId] = true;
       this.$buefy.toast.open({
         message: 'Category updated',
         position: 'is-top-right',
@@ -152,8 +195,15 @@ export default class Settings extends Vue {
    * @param categoryId
    */
   removeUserCategory(categoryId: number) {
-    this.usersService.removeUserFromCategory(this.userUid, categoryId);
-    this.categoriesService.removeUserFromCategory(categoryId, this.userUid);
+    this.removeCategoryFromUser({
+      userUid: this.getUserId,
+      categoryId: categoryId,
+    });
+    this.removeUserFromCategory({
+      categoryId: categoryId,
+      userUid: this.getUserId,
+    });
+
     this.$buefy.toast.open({
       message: 'Category removed',
       position: 'is-top-right',

@@ -1,8 +1,15 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import authService from '@/services/auth-service';
-import firebaseConfig from '@/services/firebase-config';
-import usersService from '@/services/users-service';
+import firebaseConfig from '@/config/firebase-config';
+
+import { namespace } from 'vuex-class';
+import { authActions } from '../../typings/auth';
+import { userActions } from '../../typings/user';
+import { CategoriesGetters, CategoriesActions } from '../../typings/categories';
+
+const authModule = namespace('authModule');
+const userModule = namespace('userModule');
+const categoriesModule = namespace('categoriesModule');
 
 @Component({
   template: './sign-up.html',
@@ -14,27 +21,80 @@ export default class SignIn extends Vue {
   public username = '';
   public gender = '';
   public location = '';
+  public isCardModalActive = false;
+  public categories: CategoryObject[] = [];
+  public selectedCategories: [] = [];
 
+  @authModule.Action(authActions.AuthentificateUser)
+  public authentificateUser!: (payload: object) => Promise<UserObject>;
+
+  @userModule.Action(userActions.CreateUserProfile)
+  public createUserProfile!: (payload: object) => Promise<UserObject>;
+
+  @categoriesModule.Getter(CategoriesGetters.GetCategories)
+  public getCategories!: CategoryObject[];
+
+  @userModule.Action(userActions.AddCategoryToUser)
+  public addCategoryToUser!: (payload: object) => Promise<UserObject>;
+
+  @categoriesModule.Action(CategoriesActions.AddUserToCategory)
+  public addUserToCategory!: (payload: object) => Promise<CategoryObject[]>;
+
+  mounted() {
+    this.categories = this.getCategories;
+  }
   signUp() {
     firebaseConfig.auth
       .createUserWithEmailAndPassword(this.email, this.password)
-      .then((result) => {
-        this.createProfile(result).then(() => {
-          authService(this.email, this.password).then(() => {
-            this.$router.push({ path: 'settings' });
-          });
+      .then(async (result) => {
+        await this.createProfile(result);
+        const options = { email: this.email, password: this.password };
+        this.authentificateUser(options).then(() => {
+          this.$router.push({ path: 'dashboard' });
         });
       });
   }
 
-  createProfile(result: any) {
+  async createProfile(result: any) {
     const userDetails = {
+      userUid: result.user.uid,
       name: this.name,
       username: this.username,
       gender: this.gender,
       location: this.location,
     };
-    const usersServiceInstance = new usersService();
-    return usersServiceInstance.createUserProfile(result.user.uid, userDetails);
+    await this.createUserProfile(userDetails);
+    this.selectedCategories.forEach((selected: number) => {
+      this.addUserCategory(selected, result.user.uid);
+    });
+  }
+
+  /**
+   * Add selected category to user
+   * Add user to category
+   * @param categoryId
+   */
+  addUserCategory(categoryId: number, userId: number) {
+    this.addCategoryToUser({ userUid: userId, categoryId: categoryId });
+
+    const categoryUserOptions = {
+      name: this.name,
+      username: this.username,
+      gender: this.gender,
+      location: this.location,
+    };
+    this.addUserToCategory({
+      categoryId: categoryId,
+      userUid: userId,
+      categoryUserOptions: categoryUserOptions,
+    });
+
+    if (categoryId != null) {
+      this.$buefy.toast.open({
+        message: 'Category updated',
+        position: 'is-top-right',
+        type: 'is-success',
+      });
+    }
   }
 }

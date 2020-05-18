@@ -1,0 +1,33 @@
+<section class="find-partner hero">
+  <div class="hero-body">
+    <div class="container find-partner__container">
+      <!-- Categories -->
+      <div class="find-partner__categories">
+        <div v-for="(category, index) in categories">
+          <b-field class="find-partner__category">
+            <b-checkbox-button
+              class=""
+              rounded
+              v-model="selectedOptions"
+              :native-value="category"
+            >
+              {{category.type}}
+            </b-checkbox-button>
+          </b-field>
+        </div>
+      </div>
+      <div v-for="(category, index) in selectedOptions" v-if="category.users">
+        <h1 class="mb-10 mt-20">{{category.type}}</h1>
+        <div class="mb-10" v-for="(user, index) in category.users">
+          {{user.name}} | {{user.gender}}
+          <span class="mr-10" @click="sendFriendRequest(index)">
+            <font-awesome-icon icon="user-plus" v-if="!isFriendRequestSent(index)"></font-awesome-icon
+              ></router-link>
+              <b-tag type="is-default" v-if="isFriendRequestSent(index)">Pending</b-tag>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

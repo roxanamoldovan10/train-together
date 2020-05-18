@@ -1,16 +1,21 @@
-interface CategoryObject {
-  description: string;
-  type: string;
-  users: object;
+export const enum userGetters {
+  GetUser = 'getUser',
+  GetUserId = 'getUserId',
+  GetUserFriendList = 'getUserFriendList',
 }
 
-interface UserProfileObject {
-  name: string;
-  username: string;
-  gender: string;
-  location: string;
+export const enum userMutations {
+  SetUser = 'setUser',
+  SetUserId = 'setUserId',
+  SetUserFriendList = 'setUserFriendList',
 }
 
-interface UserObject extends UserProfileObject {
-  categories: [{}];
+export const enum userActions {
+  CreateUserProfile = 'createUserProfile',
+  SetCurrentUser = 'setCurrentUser',
+  UpdateUserProfile = 'updateUserProfile',
+  AddCategoryToUser = 'addCategoryToUser',
+  RemoveCategoryFromUser = 'removeCategoryFromUser',
+  AddConnection = 'addConnection',
+  AcceptConnection = 'acceptConnection',
 }
