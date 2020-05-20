@@ -59,7 +59,7 @@ const actions: ActionTree<State, MainState> = {
     const pending: { [key: string]: string } = {};
     const accepted: { [key: string]: string } = {};
     const userPendingConnections = Object.keys(userDetails.friendList).filter(
-      (connection: string) => userDetails.friendList[connection] === 'pending',
+      (connection: string) => userDetails.friendList[connection] === 'review',
     );
     const userAcceptedConnections = Object.keys(userDetails.friendList).filter(
       (connection: string) => userDetails.friendList[connection] === 'accepted',

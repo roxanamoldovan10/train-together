@@ -13,12 +13,12 @@ const usersModule = namespace('usersModule');
 })
 export default class Connections extends Vue {
   // Data property
-  public friendList: [] = [];
-  public userPendingConnections: [] = [];
-  public userAcceptedConnections: [] = [];
+  public friendList: { [key: string]: string } = {};
+  public userPendingConnections: { [key: string]: string } = {};
+  public userAcceptedConnections: { [key: string]: string } = {};
 
   @userModule.Getter(userGetters.GetUserFriendList)
-  public getUserFriendList!: [];
+  public getUserFriendList!: { [key: string]: string };
 
   @userModule.Action(userActions.AddConnection)
   public addConnection!: (payload: string) => Promise<UserObject>;
@@ -26,14 +26,17 @@ export default class Connections extends Vue {
   @userModule.Action(userActions.AcceptConnection)
   public acceptConnection!: (payload: string) => Promise<UserObject>;
 
+  @userModule.Action(userActions.DeclineConnection)
+  public declineConnection!: (payload: string) => Promise<UserObject>;
+
   @usersModule.Getter(usersGetters.GetUsers)
   public getUsers!: [];
 
   @usersModule.Getter(usersGetters.GetPendingUsers)
-  public getPendingUsers!: [];
+  public getPendingUsers!: { [key: string]: string };
 
   @usersModule.Getter(usersGetters.GetAcceptedUsers)
-  public getAcceptedUsers!: [];
+  public getAcceptedUsers!: { [key: string]: string };
 
   @usersModule.Action(usersActions.UserList)
   public userList!: () => Promise<UserObject>;
@@ -44,7 +47,7 @@ export default class Connections extends Vue {
   // Lifecycle hook
   mounted() {
     this.userList();
-    this.friendList = this.getUserFriendList || [];
+    this.friendList = this.getUserFriendList || {};
     const options = {
       friendList: this.friendList,
     };
@@ -56,6 +59,18 @@ export default class Connections extends Vue {
   acceptFriendRequest(index: string) {
     this.acceptConnection(index).then(() => {
       console.log('done');
+      this.userPendingConnections = this.getPendingUsers;
+      this.userAcceptedConnections = this.getAcceptedUsers;
+      return;
+    });
+  }
+
+  declineFriendRequest(index: string) {
+    this.declineConnection(index).then(() => {
+      console.log('done');
+      this.userPendingConnections = this.getPendingUsers;
+      this.userAcceptedConnections = this.getAcceptedUsers;
+      return;
     });
   }
 }

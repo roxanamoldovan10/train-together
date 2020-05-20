@@ -15,13 +15,13 @@ export default class FindPartner extends Vue {
   // Data property
   public categories: CategoryObject[] = [];
   public selectedOptions: Array<number> = [];
-  public friendList: [] = [];
+  public friendList: { [key: string]: string } = {};
 
   @categoriesModule.Getter(CategoriesGetters.GetCategories)
   public getCategories!: CategoryObject[];
 
   @userModule.Getter(userGetters.GetUserFriendList)
-  public getUserFriendList!: [];
+  public getUserFriendList!: { [key: string]: string };
 
   @userModule.Action(userActions.AddConnection)
   public addConnection!: (payload: string) => Promise<UserObject>;
@@ -29,17 +29,18 @@ export default class FindPartner extends Vue {
   // Lifecycle hook
   mounted() {
     this.categories = this.getCategories;
-    this.friendList = this.getUserFriendList || [];
+    this.friendList = this.getUserFriendList || {};
     console.log('aaa ', this.friendList);
   }
 
-  sendFriendRequest(index: string) {
+  async sendFriendRequest(index: string) {
     console.log('sent');
-    this.addConnection(index);
-    this.isFriendRequestSent(index);
-  }
-
-  isFriendRequestSent(index: string) {
-    return Object.prototype.hasOwnProperty.call(this.friendList, index);
+    await this.addConnection(index);
+    this.friendList = await this.getUserFriendList;
+    // this.$set(this.friendList, this.getUserFriendList)
+    console.log('FRR: ', this.friendList);
+    // const test = await this.getUserFriendList;
+    // Vue.set(this.friendList, 0, test);
+    // console.log(this.friendList);
   }
 }

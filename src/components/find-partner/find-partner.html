@@ -21,11 +21,17 @@
         <div class="mb-10" v-for="(user, index) in category.users">
           {{user.name}} | {{user.gender}}
           <span class="mr-10" @click="sendFriendRequest(index)">
-            <font-awesome-icon icon="user-plus" v-if="!isFriendRequestSent(index)"></font-awesome-icon
-              ></router-link>
-              <b-tag type="is-default" v-if="isFriendRequestSent(index)">Pending</b-tag>
+            <!-- <b-tag type="is-default">{{getTest(index)}}</b-tag> -->
+            <b-tag type="is-default" v-model="friendList"
+              >{{friendList[index] || 'add' }}</b-tag
+            >
+            {{friendList}}
+            <!-- <font-awesome-icon
+              icon="user-plus"
+              v-if="!user.test"
+            ></font-awesome-icon>
+            <b-tag type="is-default" v-if="user.test">Pending</b-tag> -->
           </span>
-          
         </div>
       </div>
     </div>

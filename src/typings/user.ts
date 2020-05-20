@@ -18,4 +18,5 @@ export const enum userActions {
   RemoveCategoryFromUser = 'removeCategoryFromUser',
   AddConnection = 'addConnection',
   AcceptConnection = 'acceptConnection',
+  DeclineConnection = 'declineConnection',
 }
