@@ -57,7 +57,7 @@ export default class Connections extends Vue {
   }
 
   // Return user by id
-  retriveUserById(userId: string): any {
+  retriveUserById(userId: string): Promise<string> {
     return new Promise((resolve) => {
       const query = firebase.usersRef.child(userId + '/name');
       query.on('value', (snapshot: any) => {

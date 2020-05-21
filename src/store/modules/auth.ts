@@ -13,22 +13,15 @@ const getters: GetterTree<State, any> = {
 };
 
 const mutations: MutationTree<State> = {
-  setUserAuthState: (state: State, payload: boolean) =>
-    (state.isAuthentificated = payload),
+  setUserAuthState: (state: State, payload: boolean) => (state.isAuthentificated = payload),
 };
 
 const actions: ActionTree<State, MainState> = {
   // Authentification
-  async authentificateUser(
-    { state, commit }: ActionContext<State, MainState>,
-    userCredentials,
-  ) {
+  async authentificateUser({ commit }: ActionContext<State, MainState>, userCredentials) {
     try {
       await firebase.auth
-        .signInWithEmailAndPassword(
-          userCredentials.email,
-          userCredentials.password,
-        )
+        .signInWithEmailAndPassword(userCredentials.email, userCredentials.password)
         .then((result) => {
           if (!result || !result.user) return;
           commit('userModule/setUserId', result.user.uid, { root: true });

@@ -20,7 +20,6 @@ export default class Settings extends Vue {
   public categoryUserOptions!: UserProfileObject;
   public selectedOptions: Array<number> = [];
   public initialSelectedOptions: Array<number> = [];
-  public updateObject?: any;
   public user = {} as UserObject;
   public userId = '';
   public labelPosition = 'on-border';
@@ -80,7 +79,7 @@ export default class Settings extends Vue {
    * Updates user profile
    * @returns {Promise}
    */
-  async updateProfile({ username, name, gender, location }: any) {
+  async updateProfile() {
     if (!this.user.categories) {
       return this.updateUserProfile({ data: this.user, id: this.getUserId });
     }

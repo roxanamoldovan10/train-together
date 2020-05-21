@@ -13,14 +13,12 @@ const getters: GetterTree<State, any> = {
 };
 
 const mutations: MutationTree<State> = {
-  setCategories: (state: State, payload: CategoryObject[]) =>
-    (state.categories = payload),
+  setCategories: (state: State, payload: CategoryObject[]) => (state.categories = payload),
   setCategoryUser: (state: State, payload) => {
     Object.keys(payload.userCategories).forEach((key: string) => {
       const categoryId: number = payload.userCategories[key];
 
-      state.categories[categoryId].users[payload.userUid] =
-        payload.categoryUserOptions;
+      state.categories[categoryId].users[payload.userUid] = payload.categoryUserOptions;
     });
   },
   setNewUserCategory: (state: State, payload) => {
@@ -29,13 +27,8 @@ const mutations: MutationTree<State> = {
         payload.categoryUserOptions);
     }
 
-    // NU MERGEEEE
     state.categories[payload.categoryId].users = [];
-    state.categories[payload.categoryId].users[payload.userUid] =
-      payload.categoryUserOptions;
-
-    const id = payload.userUid;
-    const data = payload.categoryUserOptions;
+    state.categories[payload.categoryId].users[payload.userUid] = payload.categoryUserOptions;
 
     // state.categories[payload.categoryId].users[payload.userUid];
     // state.categories[payload.categoryId] = { users: { id: { data } } };
@@ -43,7 +36,7 @@ const mutations: MutationTree<State> = {
 };
 
 const actions: ActionTree<State, MainState> = {
-  retriveCategories({ state, commit }: ActionContext<State, MainState>) {
+  retriveCategories({ commit }: ActionContext<State, MainState>) {
     try {
       firebase.categoriesRef.once('value', (snapshot: any) => {
         if (snapshot) {
@@ -55,10 +48,7 @@ const actions: ActionTree<State, MainState> = {
     }
   },
 
-  addUserToCategory(
-    { state, commit }: ActionContext<State, MainState>,
-    options,
-  ) {
+  addUserToCategory({ commit }: ActionContext<State, MainState>, options) {
     try {
       firebase.categoriesRef
         .child(options.categoryId + '/users/' + options.userUid)
@@ -74,13 +64,8 @@ const actions: ActionTree<State, MainState> = {
     }
   },
 
-  removeUserFromCategory(
-    { state, commit }: ActionContext<State, MainState>,
-    options,
-  ) {
-    firebase.categoriesRef
-      .child(options.categoryId + '/users/' + options.userUid)
-      .remove();
+  removeUserFromCategory({ commit }: ActionContext<State, MainState>, options) {
+    firebase.categoriesRef.child(options.categoryId + '/users/' + options.userUid).remove();
   },
 };
 

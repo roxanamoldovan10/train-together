@@ -3,7 +3,6 @@ import { Component } from 'vue-property-decorator';
 import { namespace } from 'vuex-class';
 import { CategoriesGetters } from '../../typings/categories';
 import { userGetters, userActions } from '../../typings/user';
-import _ from 'lodash';
 
 const categoriesModule = namespace('categoriesModule');
 const userModule = namespace('userModule');
