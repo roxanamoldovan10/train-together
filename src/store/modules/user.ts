@@ -24,14 +24,19 @@ const mutations: MutationTree<State> = {
   setUser: (state: State, payload: UserObject) => {
     state.user = payload;
     if (!state.user.categories) state.user.categories = {};
+    if (!state.user.friendList) state.user.friendList = [];
   },
   setUserId: (state: State, payload: string) => (state.userId = payload),
   setUserCategory: (state: State, payload: Record<string, any>) => {
     state.user.categories[payload.key] = payload.data;
   },
   setUserFriendList: (state: State, payload: Record<string, any>) => {
-    state.user.friendList = state.user.friendList ? state.user.friendList : {};
-    state.user.friendList[payload.id] = payload.status;
+    console.log(state, payload, 'State and Payload');
+    const newConnection = {
+      [payload.id]: payload.status,
+    };
+
+    state.user.friendList.push(newConnection);
   },
   removeUserCategory: (state: State, payload: any) => {
     delete state.user.categories[payload];

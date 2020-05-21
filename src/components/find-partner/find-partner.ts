@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Watch } from 'vue-property-decorator';
 import { namespace } from 'vuex-class';
 import { CategoriesGetters } from '../../typings/categories';
 import { userGetters, userActions } from '../../typings/user';
@@ -15,30 +15,43 @@ export default class FindPartner extends Vue {
   // Data property
   public categories: CategoryObject[] = [];
   public selectedOptions: Array<number> = [];
-  public friendList: { [key: string]: string } = {};
+  public friendList: [] = [];
 
   @categoriesModule.Getter(CategoriesGetters.GetCategories)
   public getCategories!: CategoryObject[];
 
   @userModule.Getter(userGetters.GetUserFriendList)
-  public getUserFriendList!: { [key: string]: string };
+  public getUserFriendList!: [];
 
   @userModule.Action(userActions.AddConnection)
   public addConnection!: (payload: string) => Promise<UserObject>;
 
   // Lifecycle hook
-  mounted() {
+  created() {
     this.categories = this.getCategories;
     this.friendList = this.getUserFriendList || [];
     console.log('Find-partner - friend list - mounted: ', this.friendList);
   }
 
-  async sendFriendRequest(index: string) {
+  @Watch('friendList', {
+    deep: true,
+  })
+  public friendListChanged(): void {
+    console.log(
+      'The friendslist got updated!',
+      this.friendList,
+      this.getUserFriendList,
+    );
+  }
+
+  public async sendFriendRequest(index: string) {
     console.log('sent');
-    await this.addConnection(index);
-    this.friendList = this.getUserFriendList || [];
+    await this.addConnection(index).then(() => {
+      this.friendList = this.getUserFriendList || [];
+      console.log(this.friendList, 'friendlist here?!!!?');
+      console.log(' friend list - sent request: ', this.getUserFriendList);
+    });
     // this.$set(this.friendList, this.getUserFriendList)
-    console.log(' friend list - sent request: ', this.getUserFriendList);
     // const test = await this.getUserFriendList;
     // Vue.set(this.friendList, 0, test);
     // console.log(this.friendList);
