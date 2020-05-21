@@ -29,16 +29,16 @@ export default class FindPartner extends Vue {
   // Lifecycle hook
   mounted() {
     this.categories = this.getCategories;
-    this.friendList = this.getUserFriendList || {};
-    console.log('aaa ', this.friendList);
+    this.friendList = this.getUserFriendList || [];
+    console.log('Find-partner - friend list - mounted: ', this.friendList);
   }
 
   async sendFriendRequest(index: string) {
     console.log('sent');
     await this.addConnection(index);
-    this.friendList = await this.getUserFriendList;
+    this.friendList = this.getUserFriendList || [];
     // this.$set(this.friendList, this.getUserFriendList)
-    console.log('FRR: ', this.friendList);
+    console.log(' friend list - sent request: ', this.getUserFriendList);
     // const test = await this.getUserFriendList;
     // Vue.set(this.friendList, 0, test);
     // console.log(this.friendList);

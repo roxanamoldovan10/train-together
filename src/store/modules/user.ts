@@ -15,6 +15,7 @@ const getters: GetterTree<State, any> = {
     return state.userId;
   },
   getUserFriendList(state: State) {
+    console.log('friend list in user state: ', state.user.friendList);
     return state.user.friendList;
   },
 };
@@ -125,10 +126,12 @@ const actions: ActionTree<State, MainState> = {
       .child(index + '/friendList/' + state.userId)
       .set('review');
 
+    console.log('conn before commit');
     commit('setUserFriendList', {
       id: index,
-      status: 'accepted',
+      status: 'pending',
     });
+    console.log('conn AFYTER commit');
   },
 
   // Accept Friend request
@@ -143,7 +146,10 @@ const actions: ActionTree<State, MainState> = {
       .child(index + '/friendList/' + state.userId)
       .set('accepted');
 
-    commit('declineFriendList', index);
+    commit('setUserFriendList', {
+      id: index,
+      status: 'accepted',
+    });
   },
 
   // Decline Friend request
@@ -154,10 +160,7 @@ const actions: ActionTree<State, MainState> = {
     firebase.usersRef.child(state.userId + '/friendList/' + index).remove();
     firebase.usersRef.child(index + '/friendList/' + state.userId).remove();
 
-    commit('setUserFriendList', {
-      id: index,
-      status: 'accepted',
-    });
+    commit('declineFriendList', index);
   },
 };
 
