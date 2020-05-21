@@ -16,16 +16,20 @@
           </b-field>
         </div>
       </div>
+
+      <div v-if="friendList">
+        {{ friendList }}
+      </div>
+
       <div v-for="(category, index) in selectedOptions" v-if="category.users">
         <h1 class="mb-10 mt-20">{{category.type}}</h1>
         <div class="mb-10" v-for="(user, index) in category.users">
           {{user.name}} | {{user.gender}}
           <span class="mr-10" @click="sendFriendRequest(index)">
             <!-- <b-tag type="is-default">{{getTest(index)}}</b-tag> -->
-            <b-tag type="is-default" v-model="friendList"
+            <b-tag type="is-default" v-model="friendList" v-if="friendList"
               >{{friendList[index] || 'add' }}</b-tag
             >
-            {{friendList}}
             <!-- <font-awesome-icon
               icon="user-plus"
               v-if="!user.test"

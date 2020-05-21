@@ -1,8 +1,12 @@
 import { GetterTree, MutationTree, ActionTree, ActionContext } from 'vuex';
 import { MainState } from '@/typings/store';
 import firebase from '@/config/firebase-config';
+import _ from 'lodash';
+import Vue from 'vue';
 export class State {
-  public user: UserObject = {} as UserObject;
+  public user: UserObject = {
+    friendList: {},
+  } as UserObject;
   public userId = '';
 }
 
@@ -15,7 +19,6 @@ const getters: GetterTree<State, any> = {
     return state.userId;
   },
   getUserFriendList(state: State) {
-    console.log('friend list in user state: ', state.user.friendList);
     return state.user.friendList;
   },
 };
@@ -30,8 +33,7 @@ const mutations: MutationTree<State> = {
     state.user.categories[payload.key] = payload.data;
   },
   setUserFriendList: (state: State, payload: Record<string, any>) => {
-    state.user.friendList = state.user.friendList ? state.user.friendList : {};
-    state.user.friendList[payload.id] = payload.status;
+    Vue.set(state.user.friendList, payload.id, payload.status);
   },
   removeUserCategory: (state: State, payload: any) => {
     delete state.user.categories[payload];
