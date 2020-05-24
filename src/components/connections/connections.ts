@@ -70,9 +70,13 @@ export default class Connections extends Vue {
 
   acceptFriendRequest(index: string) {
     this.acceptConnection(index);
+    delete this.pendingConnections[index];
   }
 
   declineFriendRequest(index: string) {
     this.declineConnection(index);
+    delete this.pendingConnections[index];
+    this.getUserFriendList;
+    console.log(this.pendingConnections);
   }
 }

@@ -38,13 +38,16 @@ const mutations: MutationTree<State> = {
     delete state.user.categories[payload];
   },
   declineFriendList: (state: State, payload: any) => {
-    delete state.user.friendList[payload];
+    Vue.delete(state.user.friendList, payload);
   },
 };
 
 const actions: ActionTree<State, MainState> = {
   // Authentification | Sets users profile data + id
-  async createUserProfile({ commit }: ActionContext<State, MainState>, userDetails) {
+  async createUserProfile(
+    { commit }: ActionContext<State, MainState>,
+    userDetails,
+  ) {
     try {
       firebase.usersRef.child(userDetails.userUid).set({
         name: userDetails.name,
@@ -82,8 +85,13 @@ const actions: ActionTree<State, MainState> = {
     });
   },
 
-  addCategoryToUser: ({ commit }: ActionContext<State, MainState>, userDetails) => {
-    const newChildRef = firebase.usersRef.child(userDetails.userUid + '/categories').push();
+  addCategoryToUser: (
+    { commit }: ActionContext<State, MainState>,
+    userDetails,
+  ) => {
+    const newChildRef = firebase.usersRef
+      .child(userDetails.userUid + '/categories')
+      .push();
     newChildRef.set(userDetails.categoryId);
 
     commit('setUserCategory', {
@@ -92,19 +100,32 @@ const actions: ActionTree<State, MainState> = {
     });
   },
 
-  removeCategoryFromUser: ({ state, commit }: ActionContext<State, MainState>, userDetails) => {
+  removeCategoryFromUser: (
+    { state, commit }: ActionContext<State, MainState>,
+    userDetails,
+  ) => {
     const userCategoryId = Object.keys(state.user.categories).find(
-      (category: string) => state.user.categories[category] === userDetails.categoryId,
+      (category: string) =>
+        state.user.categories[category] === userDetails.categoryId,
     );
     // const index = state.user.categories.indexOf(userDetails.categoryId);
-    firebase.usersRef.child(userDetails.userUid + '/categories/' + userCategoryId).remove();
+    firebase.usersRef
+      .child(userDetails.userUid + '/categories/' + userCategoryId)
+      .remove();
     commit('removeUserCategory', userCategoryId);
   },
 
   // Friend request
-  addConnection: ({ state, commit }: ActionContext<State, MainState>, index) => {
-    firebase.usersRef.child(state.userId + '/friendList/' + index).set('pending');
-    firebase.usersRef.child(index + '/friendList/' + state.userId).set('review');
+  addConnection: (
+    { state, commit }: ActionContext<State, MainState>,
+    index,
+  ) => {
+    firebase.usersRef
+      .child(state.userId + '/friendList/' + index)
+      .set('pending');
+    firebase.usersRef
+      .child(index + '/friendList/' + state.userId)
+      .set('review');
 
     console.log('conn before commit');
     commit('setUserFriendList', {
@@ -115,9 +136,16 @@ const actions: ActionTree<State, MainState> = {
   },
 
   // Accept Friend request
-  acceptConnection: ({ state, commit }: ActionContext<State, MainState>, index) => {
-    firebase.usersRef.child(state.userId + '/friendList/' + index).set('accepted');
-    firebase.usersRef.child(index + '/friendList/' + state.userId).set('accepted');
+  acceptConnection: (
+    { state, commit }: ActionContext<State, MainState>,
+    index,
+  ) => {
+    firebase.usersRef
+      .child(state.userId + '/friendList/' + index)
+      .set('accepted');
+    firebase.usersRef
+      .child(index + '/friendList/' + state.userId)
+      .set('accepted');
 
     commit('setUserFriendList', {
       id: index,
@@ -126,7 +154,10 @@ const actions: ActionTree<State, MainState> = {
   },
 
   // Decline Friend request
-  declineConnection: ({ state, commit }: ActionContext<State, MainState>, index) => {
+  declineConnection: (
+    { state, commit }: ActionContext<State, MainState>,
+    index,
+  ) => {
     firebase.usersRef.child(state.userId + '/friendList/' + index).remove();
     firebase.usersRef.child(index + '/friendList/' + state.userId).remove();
 
