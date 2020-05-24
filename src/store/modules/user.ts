@@ -1,8 +1,11 @@
 import { GetterTree, MutationTree, ActionTree, ActionContext } from 'vuex';
 import { MainState } from '@/typings/store';
 import firebase from '@/config/firebase-config';
+import Vue from 'vue';
 export class State {
-  public user: UserObject = {} as UserObject;
+  public user: UserObject = {
+    friendList: {},
+  } as UserObject;
   public userId = '';
 }
 
@@ -29,18 +32,20 @@ const mutations: MutationTree<State> = {
     state.user.categories[payload.key] = payload.data;
   },
   setUserFriendList: (state: State, payload: Record<string, any>) => {
-    state.user.friendList = state.user.friendList || [];
-    state.user.friendList[payload.id] = payload.status;
+    Vue.set(state.user.friendList, payload.id, payload.status);
   },
   removeUserCategory: (state: State, payload: any) => {
     delete state.user.categories[payload];
+  },
+  declineFriendList: (state: State, payload: any) => {
+    Vue.delete(state.user.friendList, payload);
   },
 };
 
 const actions: ActionTree<State, MainState> = {
   // Authentification | Sets users profile data + id
   async createUserProfile(
-    { state, commit }: ActionContext<State, MainState>,
+    { commit }: ActionContext<State, MainState>,
     userDetails,
   ) {
     try {
@@ -64,7 +69,7 @@ const actions: ActionTree<State, MainState> = {
   },
 
   // Current user profile data
-  setCurrentUser({ state, commit }: ActionContext<State, MainState>, userId) {
+  setCurrentUser({ commit }: ActionContext<State, MainState>, userId) {
     firebase.usersRef.child(userId).once('value', (snapshot: any) => {
       if (snapshot) {
         commit('setUser', snapshot.val());
@@ -72,7 +77,7 @@ const actions: ActionTree<State, MainState> = {
     });
   },
 
-  updateUserProfile({ state, commit }: ActionContext<State, MainState>, user) {
+  updateUserProfile({ commit }: ActionContext<State, MainState>, user) {
     const updateObject: any = {};
     updateObject[`users/${user.id}`] = user.data;
     firebase.databaseRef.update(updateObject).then(() => {
@@ -81,7 +86,7 @@ const actions: ActionTree<State, MainState> = {
   },
 
   addCategoryToUser: (
-    { state, commit }: ActionContext<State, MainState>,
+    { commit }: ActionContext<State, MainState>,
     userDetails,
   ) => {
     const newChildRef = firebase.usersRef
@@ -122,10 +127,12 @@ const actions: ActionTree<State, MainState> = {
       .child(index + '/friendList/' + state.userId)
       .set('review');
 
+    console.log('conn before commit');
     commit('setUserFriendList', {
       id: index,
       status: 'pending',
     });
+    console.log('conn AFYTER commit');
   },
 
   // Accept Friend request
@@ -144,6 +151,17 @@ const actions: ActionTree<State, MainState> = {
       id: index,
       status: 'accepted',
     });
+  },
+
+  // Decline Friend request
+  declineConnection: (
+    { state, commit }: ActionContext<State, MainState>,
+    index,
+  ) => {
+    firebase.usersRef.child(state.userId + '/friendList/' + index).remove();
+    firebase.usersRef.child(index + '/friendList/' + state.userId).remove();
+
+    commit('declineFriendList', index);
   },
 };
 
