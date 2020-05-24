@@ -4,7 +4,7 @@ import firebaseConfig from '@/config/firebase-config';
 
 import { namespace } from 'vuex-class';
 import { authActions } from '../../typings/auth';
-import { userActions } from '../../typings/user';
+import { userGetters, userActions } from '../../typings/user';
 import { CategoriesGetters, CategoriesActions } from '../../typings/categories';
 
 const authModule = namespace('authModule');
@@ -31,6 +31,9 @@ export default class SignIn extends Vue {
   @userModule.Action(userActions.CreateUserProfile)
   public createUserProfile!: (payload: object) => Promise<UserObject>;
 
+  @userModule.Getter(userGetters.GetUserId)
+  public getUserId!: string;
+
   @categoriesModule.Getter(CategoriesGetters.GetCategories)
   public getCategories!: CategoryObject[];
 
@@ -52,10 +55,11 @@ export default class SignIn extends Vue {
         this.authentificateUser(options).then(() => {
           this.$router.push({ path: 'dashboard' });
         });
+        this.isCardModalActive = true;
       });
   }
 
-  async createProfile(result: any) {
+  createProfile(result: any) {
     const userDetails = {
       userUid: result.user.uid,
       name: this.name,
@@ -63,9 +67,13 @@ export default class SignIn extends Vue {
       gender: this.gender,
       location: this.location,
     };
-    await this.createUserProfile(userDetails);
+    this.createUserProfile(userDetails);
+  }
+
+  addCategories() {
+    const userId = this.getUserId;
     this.selectedCategories.forEach((selected: number) => {
-      this.addUserCategory(selected, result.user.uid);
+      this.addUserCategory(selected, userId);
     });
   }
 
@@ -74,7 +82,7 @@ export default class SignIn extends Vue {
    * Add user to category
    * @param categoryId
    */
-  addUserCategory(categoryId: number, userId: number) {
+  addUserCategory(categoryId: number, userId: string) {
     this.addCategoryToUser({ userUid: userId, categoryId: categoryId });
 
     const categoryUserOptions = {
@@ -96,5 +104,13 @@ export default class SignIn extends Vue {
         type: 'is-success',
       });
     }
+  }
+
+  isInvalid() {
+    return !this.email || !this.password || !this.name || !this.username;
+  }
+
+  hasError() {
+    return this.password.length < 8;
   }
 }
