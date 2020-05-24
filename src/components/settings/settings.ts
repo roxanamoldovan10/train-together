@@ -62,7 +62,6 @@ export default class Settings extends Vue {
   // Lifecycle hook
   mounted() {
     this.getUserDetails();
-    this.retriveCategories();
     this.categories = this.getCategories;
   }
 
