@@ -3,12 +3,20 @@
     <div class="container find-partner__container">
       <div v-for="(user, index) in userPendingConnections">
         <h1 class="mb-10 mt-20">{{user}}</h1>
-        <span class="mr-10" @click="acceptFriendRequest(index)">
+        <b-button
+          type="is-text"
+          class="mr-10"
+          @click="acceptFriendRequest(index)"
+        >
           <font-awesome-icon icon="check"></font-awesome-icon>
-        </span>
-        <span class="mr-10" @click="declineFriendRequest(index)">
+        </b-button>
+        <b-button
+          type="is-text"
+          class="mr-10"
+          @click="declineFriendRequest(index)"
+        >
           <font-awesome-icon icon="times"></font-awesome-icon>
-        </span>
+        </b-button>
       </div>
       <div v-for="(user, index) in userAcceptedConnections">
         <h1 class="mb-10 mt-20">{{user}}</h1>
