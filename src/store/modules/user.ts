@@ -62,9 +62,8 @@ const actions: ActionTree<State, MainState> = {
   // Current user profile data
   setCurrentUser({ commit }: ActionContext<State, MainState>, userId) {
     firebase.usersRef.child(userId).once('value', (snapshot: any) => {
-      if (snapshot) {
-        commit('setUser', snapshot.val());
-      }
+      if (!snapshot) return;
+      commit('setUser', snapshot.val());
     });
   },
 
