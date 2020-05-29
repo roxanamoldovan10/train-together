@@ -45,13 +45,10 @@ export default class OnboardingModal extends Vue {
   @commonModule.Action(CommonActions.UpdateBulkUserCategories)
   public updateBulkUserCategories!: (payload: object) => Promise<UserObject>;
 
-  public get getUserTest() {
+  public get getCategoriesUser() {
     this.isCardModalActive = _.isEmpty(this.getUser.categories) ? true : false;
-    return this.isCardModalActive;
-  }
-
-  created() {
     this.categories = this.getCategories;
+    return this.isCardModalActive;
   }
 
   next() {
