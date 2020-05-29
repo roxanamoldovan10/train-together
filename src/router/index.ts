@@ -34,7 +34,9 @@ const routes = [
     path: '/settings',
     name: 'Settings',
     component: () =>
-      import(/* webpackChunkName: "settings" */ '@/components/settings/settings.vue'),
+      import(
+        /* webpackChunkName: "settings" */ '@/components/settings/settings.vue'
+      ),
     meta: {
       requiresAuth: true,
     },
@@ -43,7 +45,9 @@ const routes = [
     path: '/find',
     name: 'Find',
     component: () =>
-      import(/* webpackChunkName: "find" */ '@/components/find-partner/find-partner.vue'),
+      import(
+        /* webpackChunkName: "find" */ '@/components/find-partner/find-partner.vue'
+      ),
     meta: {
       requiresAuth: true,
     },
@@ -52,7 +56,9 @@ const routes = [
     path: '/connections',
     name: 'Connections',
     component: () =>
-      import(/* webpackChunkName: "connections" */ '@/components/connections/connections.vue'),
+      import(
+        /* webpackChunkName: "connections" */ '@/components/connections/connections.vue'
+      ),
     meta: {
       requiresAuth: true,
     },
@@ -68,8 +74,8 @@ router.beforeEach((to, from, next) => {
   const currentUser = firebase.auth.currentUser;
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-  if (requiresAuth && !currentUser) next('sign-in');
-  else if (!requiresAuth && currentUser) next('dashboard');
+  if (requiresAuth && !currentUser) next('login');
+  else if (!requiresAuth && currentUser) next();
   else next();
 });
 

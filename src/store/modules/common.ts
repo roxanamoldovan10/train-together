@@ -7,13 +7,19 @@ export class State {}
 
 const actions: ActionTree<State, MainState> = {
   // Updates user profile detils
-  updateBulkUserCategories: ({ commit }: ActionContext<State, MainState>, userDetails) => {
+  updateBulkUserCategories: (
+    { commit }: ActionContext<State, MainState>,
+    userDetails,
+  ) => {
     const updateObject: any = {};
     Object.keys(userDetails.userCategories).forEach((key: string) => {
       const categoryId = userDetails.userCategories[key];
+      // Updates user details in Categories table for each user category
       updateObject[`categories/${categoryId}/users/${userDetails.userUid}`] =
         userDetails.categoryUserOptions;
     });
+
+    // Updates Users table - user details
     updateObject[`users/${userDetails.userUid}`] = userDetails.userOptions;
 
     firebaseConfig.databaseRef.update(updateObject).then(() => {

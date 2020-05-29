@@ -27,6 +27,9 @@ export default class SignIn extends Vue {
   @userModule.Action(userActions.SetCurrentUser)
   public setCurrentUser!: (payload: string) => Promise<UserObject>;
 
+  @userModule.Action(userActions.SetCurrentUserId)
+  public setCurrentUserId!: () => Promise<UserObject>;
+
   @userModule.Getter(userGetters.GetUserId)
   public getUserId!: string;
 
@@ -38,6 +41,7 @@ export default class SignIn extends Vue {
     const options = { email: this.email, password: this.password };
     await this.authentificateUser(options).then(() => {
       try {
+        this.setCurrentUserId();
         this.setCurrentUser(this.getUserId);
         this.retriveCategories();
         this.$router.push({ path: 'dashboard' });

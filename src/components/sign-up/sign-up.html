@@ -3,7 +3,7 @@
     <div class="column is-half">
       <div class="sign-up__form">
         <div class="sign-up__fields">
-          <form @submit="signUp()" id="signUpForm">
+          <form id="signUpForm">
             <div>Create profile</div>
             <!-- Email -->
             <b-field label="Email">
@@ -54,49 +54,13 @@
               </div>
             </div>
 
-            <b-button type="submit" :disabled="isInvalid()" rounded
+            <b-button @click="signUp" :disabled="isInvalid()" rounded
               >Sign Up</b-button
             >
-            <b-button rounded
-              ><router-link to="/login">Go to login</router-link></b-button
+            <router-link to="/login">
+              <b-button rounded>Go to login</b-button></router-link
             >
           </form>
-
-          <div class="sign-up__card-footer">
-            <b-modal
-              :active.sync="isCardModalActive"
-              :width="640"
-              scroll="keep"
-            >
-              <div class="card">
-                <div class="card-content">
-                  <div class="media">
-                    <div class="media-content">
-                      <p class="title is-4">Complete your profile</p>
-                    </div>
-                  </div>
-
-                  <div class="content sign-up__categories">
-                    <div v-for="(category, index) in categories">
-                      <b-field class="sign-up__category">
-                        <b-checkbox-button
-                          class="sign-up__category__button"
-                          rounded
-                          v-model="selectedCategories"
-                          :native-value="index"
-                        >
-                          {{category.type}}
-                        </b-checkbox-button>
-                      </b-field>
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-10 sign-up__card-footer__btn">
-                  <b-button rounded @click="addCategories()">Done</b-button>
-                </div>
-              </div>
-            </b-modal>
-          </div>
         </div>
       </div>
     </div>
