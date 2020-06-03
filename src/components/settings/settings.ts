@@ -18,8 +18,8 @@ export default class Settings extends Vue {
   // Data property
   public categories: CategoryObject[] = [];
   public categoryUserOptions!: UserProfileObject;
-  public selectedOptions: Array<number> = [];
-  public initialSelectedOptions: Array<number> = [];
+  public selectedOptions: { [key: string]: number } = {};
+  public initialSelectedOptions: { [key: string]: number } = {};
   public user = {} as UserObject;
   public userId = '';
   public labelPosition = 'on-border';
@@ -59,7 +59,10 @@ export default class Settings extends Vue {
   getUserDetails() {
     this.user = this.getUser;
     this.userId = this.getUserId;
-    if (this.user.categories) this.getUserSelectedCategories();
+    if (this.user.categories) {
+      this.selectedOptions = this.user.categories;
+      this.initialSelectedOptions = this.selectedOptions;
+    }
   }
 
   /**
@@ -72,17 +75,18 @@ export default class Settings extends Vue {
     }
 
     // Checks is user deselected some categories
-    const deselectedCategories = this.initialSelectedOptions.filter((obj) => {
-      return this.selectedOptions.indexOf(obj) == -1;
+    const deselectedCategories = Object.keys(
+      this.initialSelectedOptions,
+    ).filter((obj) => {
+      return this.selectedOptions[obj] !== this.initialSelectedOptions[obj];
     });
 
     this.initialSelectedOptions = this.selectedOptions;
 
     // Remove categories from user
     if (deselectedCategories) {
-      deselectedCategories.forEach((selected: number) => {
-        const selectedInt = selected.toString();
-        this.removeUserCategory(selectedInt);
+      deselectedCategories.forEach((selected: string) => {
+        this.removeUserCategory(selected);
       });
     }
 
@@ -103,17 +107,6 @@ export default class Settings extends Vue {
     };
 
     await this.updateBulkUserCategories(options);
-  }
-
-  /**
-   * Assign keys for user selected categories
-   */
-  getUserSelectedCategories() {
-    const userCategoriesKeys = Object.keys(this.user.categories);
-    userCategoriesKeys.forEach((categoryKey: string) => {
-      this.selectedOptions.push(this.user.categories[categoryKey]);
-    });
-    this.initialSelectedOptions = _.cloneDeep(this.selectedOptions);
   }
 
   /**

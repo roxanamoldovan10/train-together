@@ -19,7 +19,7 @@ export default class OnboardingModal extends Vue {
   public isCardModalActive = false;
   public canCancel = false;
   public location = '';
-  public selectedCategories: [] = [];
+  public selectedCategories: { [key: string]: number } = {};
   public onboardingData = {
     text: 'Welcome',
     subtext: 'Next you will create your profile',
@@ -46,6 +46,7 @@ export default class OnboardingModal extends Vue {
   public updateBulkUserCategories!: (payload: object) => Promise<UserObject>;
 
   public get getCategoriesUser() {
+    if (_.isEmpty(this.getUser.name)) return;
     this.isCardModalActive = _.isEmpty(this.getUser.categories) ? true : false;
     this.categories = this.getCategories;
     return this.isCardModalActive;
@@ -59,7 +60,6 @@ export default class OnboardingModal extends Vue {
         this.onboardingData.subtext = '';
         break;
       case 2:
-        this.addCategories();
         this.onboardingData.text = 'Location';
         this.onboardingData.subtext = '+ radius';
         break;
@@ -77,8 +77,8 @@ export default class OnboardingModal extends Vue {
 
   addCategories() {
     const userId = this.getUserId;
-    this.selectedCategories.forEach((selected: number) => {
-      this.addUserCategory(selected, userId);
+    Object.keys(this.selectedCategories).forEach((selected: string) => {
+      this.addUserCategory(this.selectedCategories[selected], userId);
     });
   }
 
@@ -112,6 +112,7 @@ export default class OnboardingModal extends Vue {
 
   updateUserLocation() {
     const user = this.getUser;
+    user.categories = this.selectedCategories;
     user.location = this.location;
 
     const categoryUserOptions = {
