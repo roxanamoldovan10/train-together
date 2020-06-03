@@ -45,14 +45,14 @@ export default class OnboardingModal extends Vue {
   @commonModule.Action(CommonActions.UpdateBulkUserCategories)
   public updateBulkUserCategories!: (payload: object) => Promise<UserObject>;
 
-  public get getCategoriesUser() {
+  public get getCategoriesUser(): boolean | void {
     if (_.isEmpty(this.getUser.name)) return;
     this.isCardModalActive = _.isEmpty(this.getUser.categories) ? true : false;
     this.categories = this.getCategories;
     return this.isCardModalActive;
   }
 
-  next() {
+  next(): void {
     this.onboardingData.step++;
     switch (this.onboardingData.step) {
       case 1:
@@ -75,7 +75,7 @@ export default class OnboardingModal extends Vue {
     }
   }
 
-  addCategories() {
+  addCategories(): void {
     const userId = this.getUserId;
     Object.keys(this.selectedCategories).forEach((selected: string) => {
       this.addUserCategory(this.selectedCategories[selected], userId);
@@ -87,7 +87,7 @@ export default class OnboardingModal extends Vue {
    * Add user to category
    * @param categoryId
    */
-  addUserCategory(categoryId: number, userId: string) {
+  addUserCategory(categoryId: number, userId: string): void {
     this.addCategoryToUser({ userUid: userId, categoryId: categoryId });
 
     const categoryUserOptions = {
@@ -110,7 +110,7 @@ export default class OnboardingModal extends Vue {
     }
   }
 
-  updateUserLocation() {
+  updateUserLocation(): void {
     const user = this.getUser;
     user.categories = this.selectedCategories;
     user.location = this.location;
