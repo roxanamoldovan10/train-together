@@ -53,16 +53,7 @@ const actions: ActionTree<State, MainState> = {
         name: userDetails.name,
         username: userDetails.username,
         gender: userDetails.gender,
-        location: userDetails.location,
       });
-      const userProfile = {
-        name: userDetails.name,
-        username: userDetails.username,
-        gender: userDetails.gender,
-        location: userDetails.location,
-      };
-      commit('setUser', userProfile);
-      commit('setUserId', userDetails.userUid);
     } catch {
       throw Error('Could not fetch data');
     }
@@ -71,10 +62,16 @@ const actions: ActionTree<State, MainState> = {
   // Current user profile data
   setCurrentUser({ commit }: ActionContext<State, MainState>, userId) {
     firebase.usersRef.child(userId).once('value', (snapshot: any) => {
-      if (snapshot) {
-        commit('setUser', snapshot.val());
-      }
+      if (!snapshot) return;
+      commit('setUser', snapshot.val());
     });
+  },
+
+  // Current user id
+  setCurrentUserId({ commit }: ActionContext<State, MainState>) {
+    const user = firebase.auth.currentUser;
+    if (!user) return;
+    commit('setUserId', user.uid);
   },
 
   updateUserProfile({ commit }: ActionContext<State, MainState>, user) {

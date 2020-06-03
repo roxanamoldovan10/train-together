@@ -13,6 +13,7 @@ export const enum userMutations {
 export const enum userActions {
   CreateUserProfile = 'createUserProfile',
   SetCurrentUser = 'setCurrentUser',
+  SetCurrentUserId = 'setCurrentUserId',
   UpdateUserProfile = 'updateUserProfile',
   AddCategoryToUser = 'addCategoryToUser',
   RemoveCategoryFromUser = 'removeCategoryFromUser',

@@ -1,0 +1,54 @@
+<b-modal
+  v-if="getCategoriesUser"
+  :active.sync="isCardModalActive"
+  :width="640"
+  scroll="keep"
+  :can-cancel="canCancel"
+>
+  <div class="card">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-content">
+          <p class="title is-4">{{onboardingData.text}}</p>
+          <p class="title is-6">{{onboardingData.subtext}}</p>
+        </div>
+      </div>
+
+      <!-- Categories -->
+      <div class="content sign-up__categories" v-if="onboardingData.step === 1">
+        <div v-for="(category, index) in categories">
+          <b-field class="sign-up__category">
+            <b-checkbox-button
+              class="sign-up__category__button"
+              rounded
+              v-model="selectedCategories"
+              :native-value="index"
+            >
+              {{category.type}}
+            </b-checkbox-button>
+          </b-field>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="content sign-up__categories" v-if="onboardingData.step === 2">
+        <b-field class="mb-20" label="Location">
+          <b-input
+            type="text"
+            v-model="location"
+            placeholder="Location"
+            rounded
+          >
+          </b-input>
+        </b-field>
+      </div>
+      <!-- Done -->
+    </div>
+    <div class="mb-10 sign-up__card-footer__btn">
+      <b-button rounded @click="next()">
+        <span v-if="onboardingData.step !== 3">Next</span>
+        <span v-else>Done</span>
+      </b-button>
+    </div>
+  </div>
+</b-modal>
