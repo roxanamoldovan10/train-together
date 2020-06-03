@@ -1,19 +1,21 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import firebaseConfig from '@/config/firebase-config';
+import { namespace } from 'vuex-class';
 import onboardingModal from '../onboarding-modal/onboarding-modal.vue';
+import { authActions } from '../../typings/auth';
+
+const authModule = namespace('authModule');
 
 @Component({
   template: './dashboard.html',
   components: { onboardingModal },
 })
 export default class Dashboard extends Vue {
-  // Data property
-  public myDataProperty?: string;
+  @authModule.Action(authActions.Logout)
+  public logout!: () => void;
 
-  logout() {
-    firebaseConfig.auth.signOut().then(() => {
-      this.$router.replace('login');
-    });
+  async userLogout() {
+    await this.logout();
+    this.$router.replace('login');
   }
 }

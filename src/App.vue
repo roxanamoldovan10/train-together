@@ -1,21 +1,19 @@
 <template>
   <div id="app" class="columns">
-    <div id="nav" class="navbar column is-1 is-light">
-      <router-link to="/dashboard" class="navbar-item">
-        <font-awesome-icon icon="home"></font-awesome-icon
-      ></router-link>
-      <router-link to="/settings" class="navbar-item">
-        <font-awesome-icon icon="cog"></font-awesome-icon
-      ></router-link>
-      <router-link to="/find" class="navbar-item">
-        <font-awesome-icon icon="search"></font-awesome-icon
-      ></router-link>
-      <router-link to="/connections" class="navbar-item">
-        <font-awesome-icon icon="user-friends"></font-awesome-icon
-      ></router-link>
-    </div>
+    <Navigation></Navigation>
+    <!-- -->
     <div style="width:100%">
       <router-view />
     </div>
   </div>
 </template>
+
+<script>
+import Navigation from './components/navigation/navigation.vue';
+export default {
+  name: 'app',
+  components: {
+    Navigation: Navigation,
+  },
+};
+</script>
