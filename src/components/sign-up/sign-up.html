@@ -4,7 +4,7 @@
       <div class="sign-up__form">
         <div class="sign-up__fields">
           <form id="signUpForm">
-            <div>Create profile</div>
+            <h4 class="title is-4">Create profile</h4>
             <!-- Email -->
             <b-field label="Email">
               <b-input type="email" v-model="email" placeholder="Email" rounded>
@@ -26,7 +26,7 @@
               </b-input>
             </b-field>
 
-            <p>Profile details</p>
+            <h5 class="title is-5 sign-up__profile-details">Profile details</h5>
             <div>
               <!-- Name -->
               <b-field label="Name">
@@ -44,7 +44,7 @@
                 </b-input>
               </b-field>
               <!-- Gender -->
-              <div>
+              <div class="sign-up__gender">
                 <b-radio v-model="gender" native-value="Male">
                   Male
                 </b-radio>
@@ -54,12 +54,12 @@
               </div>
             </div>
 
-            <b-button @click="signUp" :disabled="isInvalid()" rounded
-              >Sign Up</b-button
-            >
-            <router-link to="/login">
-              <b-button rounded>Go to login</b-button></router-link
-            >
+            <div class="sign-up__buttons">
+              <b-button @click="signUp" :disabled="isInvalid()" rounded>
+                Sign Up
+              </b-button>
+              <b-button @click="goBack" rounded>Go to login</b-button>
+            </div>
           </form>
         </div>
       </div>

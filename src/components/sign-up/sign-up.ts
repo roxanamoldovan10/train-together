@@ -29,6 +29,10 @@ export default class SignIn extends Vue {
       });
   }
 
+  goBack(): void {
+    this.$router.push({ path: 'login' });
+  }
+
   createProfile(result: any) {
     const userDetails = {
       userUid: result.user.uid,
@@ -44,6 +48,6 @@ export default class SignIn extends Vue {
   }
 
   hasError() {
-    return this.password.length < 8;
+    return this.password.length > 0 && this.password.length < 8;
   }
 }

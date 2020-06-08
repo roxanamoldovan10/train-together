@@ -1,8 +1,11 @@
+@import '../../scss/colors';
+
 .sign-up {
   display: flex;
   height: 100%;
   &__content {
     width: 100%;
+    margin: 0 !important;
   }
   &__form {
     display: flex;
@@ -12,19 +15,10 @@
     width: 60%;
   }
 
-  &__buttons {
-    :first-child {
-      width: 47%;
-      margin-right: 5%;
-    }
-    :last-child {
-      width: 47%;
-    }
-  }
   &__right {
     height: 100%;
     width: 100%;
-    background-color: #0000001c;
+    background-color: #3f898b8f;
   }
   &__categories {
     display: flex;
@@ -45,6 +39,23 @@
       button {
         margin-bottom: 10px;
       }
+    }
+  }
+  &__profile-details {
+    margin-top: 35px;
+  }
+  &__gender {
+    margin: 20px 0;
+  }
+  &__buttons {
+    display: flex;
+    button:first-child {
+      margin-right: 5%;
+      background-color: $primary;
+      color: $white;
+    }
+    button {
+      width: 50%;
     }
   }
 }

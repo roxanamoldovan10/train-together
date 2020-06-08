@@ -50,4 +50,8 @@ export default class SignIn extends Vue {
       }
     });
   }
+
+  signup() {
+    this.$router.push({ path: 'sign-up' });
+  }
 }
