@@ -12,6 +12,6 @@ interface UserProfileObject {
 }
 
 interface UserObject extends UserProfileObject {
-  categories: { [key: string]: number };
+  categories: [];
   friendList: { [key: string]: string };
 }

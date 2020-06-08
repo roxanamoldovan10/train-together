@@ -19,7 +19,8 @@ export default class OnboardingModal extends Vue {
   public isCardModalActive = false;
   public canCancel = false;
   public location = '';
-  public selectedCategories: { [key: string]: number } = {};
+  // Needs to be Array to be able to push into from dom
+  public selectedCategories: [] = [];
   public onboardingData = {
     text: 'Welcome',
     subtext: 'Next you will create your profile',
@@ -78,7 +79,8 @@ export default class OnboardingModal extends Vue {
   addCategories(): void {
     const userId = this.getUserId;
     Object.keys(this.selectedCategories).forEach((selected: string) => {
-      this.addUserCategory(this.selectedCategories[selected], userId);
+      const ii = parseInt(selected);
+      this.addUserCategory(this.selectedCategories[ii], userId);
     });
   }
 
