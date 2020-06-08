@@ -13,7 +13,7 @@ export default class SignIn extends Vue {
   @authModule.Getter(authGetters.GetUserAuthState)
   public getUserAuthState!: boolean;
 
-  public get isUserAuthentificated() {
+  public get isUserAuthentificated(): boolean {
     return this.getUserAuthState;
   }
 }
