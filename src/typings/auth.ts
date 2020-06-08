@@ -8,4 +8,5 @@ export const enum authMutations {
 
 export const enum authActions {
   AuthentificateUser = 'authentificateUser',
+  Logout = 'logout',
 }

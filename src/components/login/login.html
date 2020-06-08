@@ -3,7 +3,9 @@
     <div class="column is-half">
       <div class="login__form">
         <div class="login__fields">
-          <div>Login</div>
+          <div class="subtitle">
+            Login
+          </div>
           <b-field label="Email">
             <b-input type="email" v-model="email" placeholder="Email" rounded>
             </b-input>
@@ -20,9 +22,7 @@
           </b-field>
           <div class="login__buttons">
             <b-button @click="login" rounded>Login</b-button>
-            <router-link to="/sign-up">
-              <b-button rounded>Sign Up</b-button></router-link
-            >
+            <b-button @click="signup" rounded>Sign Up</b-button>
           </div>
         </div>
       </div>
