@@ -2,7 +2,7 @@
   <div id="app" class="columns">
     <Navigation></Navigation>
     <!-- -->
-    <div style="width:100%">
+    <div class="routers">
       <router-view />
     </div>
   </div>
@@ -17,3 +17,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.routers {
+  width: 100%;
+  height: 100%;
+}
+</style>
