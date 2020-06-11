@@ -18,8 +18,8 @@ export default class Settings extends Vue {
   // Data property
   public categories: CategoryObject[] = [];
   public categoryUserOptions!: UserProfileObject;
-  public selectedOptions: { [key: string]: number } = {};
-  public initialSelectedOptions: { [key: string]: number } = {};
+  public selectedOptions: number[] = [];
+  public initialSelectedOptions: number[] = [];
   public user = {} as UserObject;
   public userId = '';
   public labelPosition = 'on-border';
@@ -60,7 +60,9 @@ export default class Settings extends Vue {
     this.user = this.getUser;
     this.userId = this.getUserId;
     if (this.user.categories) {
-      this.selectedOptions = this.user.categories;
+      Object.keys(this.user.categories).forEach((category: string) => {
+        this.selectedOptions.push(this.user.categories[category]);
+      });
       this.initialSelectedOptions = this.selectedOptions;
     }
   }

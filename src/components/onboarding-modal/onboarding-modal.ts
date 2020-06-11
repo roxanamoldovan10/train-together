@@ -20,7 +20,7 @@ export default class OnboardingModal extends Vue {
   public canCancel = false;
   public location = '';
   // Needs to be Array to be able to push into from dom
-  public selectedCategories: [] = [];
+  public selectedCategories: number[] = [];
   public onboardingData = {
     text: 'Welcome',
     subtext: 'Next you will create your profile',
@@ -79,8 +79,7 @@ export default class OnboardingModal extends Vue {
   addCategories(): void {
     const userId = this.getUserId;
     Object.keys(this.selectedCategories).forEach((selected: string) => {
-      const ii = parseInt(selected);
-      this.addUserCategory(this.selectedCategories[ii], userId);
+      this.addUserCategory(this.selectedCategories[selected], userId);
     });
   }
 
@@ -114,7 +113,7 @@ export default class OnboardingModal extends Vue {
 
   updateUserLocation(): void {
     const user = this.getUser;
-    user.categories = this.selectedCategories;
+    Object.assign(user.categories, this.selectedCategories);
     user.location = this.location;
 
     const categoryUserOptions = {
