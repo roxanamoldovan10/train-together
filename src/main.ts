@@ -18,6 +18,7 @@ import {
   faUserFriends,
   faCheck,
   faTimes,
+  faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -32,6 +33,7 @@ library.add(
   faUserFriends,
   faCheck,
   faTimes,
+  faSignOutAlt,
 );
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
