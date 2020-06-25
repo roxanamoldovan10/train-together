@@ -1,8 +1,11 @@
+@import '../../scss/colors';
+
 .login {
   display: flex;
   height: 100%;
   &__content {
     width: 100%;
+    margin: 0 !important;
   }
   &__form {
     display: flex;
@@ -13,17 +16,19 @@
   }
 
   &__buttons {
-    :first-child {
-      width: 47%;
+    display: flex;
+    button:first-child {
       margin-right: 5%;
+      background-color: $primary;
+      color: $white;
     }
-    :last-child {
-      width: 47%;
+    button {
+      width: 50%;
     }
   }
   &__right {
     height: 100%;
     width: 100%;
-    background-color: #0000001c;
+    background-color: #3f898b8f;
   }
 }

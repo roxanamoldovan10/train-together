@@ -4,7 +4,6 @@ import firebaseConfig from '@/config/firebase-config';
 import router from './router';
 import store from './store';
 import Buefy from 'buefy';
-import 'buefy/dist/buefy.css';
 import '@/scss/main.scss';
 import _ from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -19,6 +18,7 @@ import {
   faUserFriends,
   faCheck,
   faTimes,
+  faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -33,6 +33,7 @@ library.add(
   faUserFriends,
   faCheck,
   faTimes,
+  faSignOutAlt,
 );
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

@@ -13,15 +13,22 @@ const getters: GetterTree<State, any> = {
 };
 
 const mutations: MutationTree<State> = {
-  setUserAuthState: (state: State, payload: boolean) => (state.isAuthentificated = payload),
+  setUserAuthState: (state: State, payload: boolean) =>
+    (state.isAuthentificated = payload),
 };
 
 const actions: ActionTree<State, MainState> = {
   // Authentification
-  async authentificateUser({ commit }: ActionContext<State, MainState>, userCredentials) {
+  async authentificateUser(
+    { commit }: ActionContext<State, MainState>,
+    userCredentials,
+  ) {
     try {
       await firebase.auth
-        .signInWithEmailAndPassword(userCredentials.email, userCredentials.password)
+        .signInWithEmailAndPassword(
+          userCredentials.email,
+          userCredentials.password,
+        )
         .then((result) => {
           if (!result || !result.user) return;
           commit('userModule/setUserId', result.user.uid, { root: true });
@@ -30,6 +37,10 @@ const actions: ActionTree<State, MainState> = {
     } catch {
       throw Error('Could not fetch data');
     }
+  },
+  logout({ commit }: ActionContext<State, MainState>) {
+    firebase.auth.signOut();
+    commit('setUserAuthState', false);
   },
 };
 
